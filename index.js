@@ -8,6 +8,20 @@
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
 
+  const totals = publications.reduce((result, publication) => {
+    result.all += 1;
+    result[publication.type] = (result[publication.type] || 0) + 1;
+    return result;
+  }, { all: 0 });
+
+  filters.forEach(button => {
+    const badge = button.querySelector("span");
+    if (badge) badge.textContent = totals[button.dataset.filter] || 0;
+  });
+  [document.querySelector("#publication-total"), document.querySelector("#hero-publication-total")]
+    .filter(Boolean)
+    .forEach(element => { element.textContent = totals.all; });
+
   const escapeHTML = (value = "") => value.replace(/[&<>"']/g, character => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
   })[character]);

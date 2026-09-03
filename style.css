@@ -88,6 +88,15 @@ button { color: inherit; }
 .about-photo { position: sticky; top: calc(var(--header) + 28px); }
 .about-photo img { width: 100%; height: 430px; object-fit: cover; object-position: center 18%; filter: saturate(.78); }
 .about-photo::after { content: "NSDCS / IIT INDORE"; position: absolute; right: -10px; bottom: 20px; background: var(--acid); padding: 10px 13px; font: 600 .66rem/1 "IBM Plex Mono", monospace; letter-spacing: .08em; }
+.research-method { position: sticky; top: calc(var(--header) + 28px); padding: 30px; background: var(--ink); color: var(--white); border-top: 4px solid var(--acid); box-shadow: 18px 18px 0 #dfe5e9; }
+.method-kicker { margin: 0 0 20px; color: var(--cyan); font: 600 .66rem/1.35 "IBM Plex Mono",monospace; letter-spacing: .1em; text-transform: uppercase; }
+.research-method h3 { margin: 0 0 30px; font: 700 clamp(1.65rem,2.7vw,2.45rem)/1.08 "Manrope",sans-serif; letter-spacing: -.04em; }
+.research-method ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid #32445b; }
+.research-method li { min-height: 72px; display: grid; grid-template-columns: 38px 1fr; gap: 13px; align-items: center; border-bottom: 1px solid #32445b; }
+.research-method li>span { color: var(--acid); font: 600 .68rem/1 "IBM Plex Mono",monospace; }
+.research-method li div { display: grid; gap: 4px; }
+.research-method li strong { font: 700 .96rem/1.2 "Manrope",sans-serif; }
+.research-method li small { color: #91a2b6; font-size: .75rem; }
 .about-copy > p { color: var(--muted); font-size: 1.05rem; }
 .about-copy .lead { margin-top: 0; color: var(--ink); font: 600 clamp(1.3rem,2vw,1.75rem)/1.5 "Manrope",sans-serif; letter-spacing: -.02em; }
 .timeline { margin-top: 52px; border-top: 1px solid var(--ink); }
@@ -211,7 +220,7 @@ footer p:last-child { justify-self: end; }
   .section-heading { margin-bottom: 40px; }
   .section-heading.split { grid-template-columns: 1fr; gap: 20px; }
   .about-layout,.contact { grid-template-columns: 1fr; gap: 48px; }
-  .about-photo,.contact-copy { position: relative; top: 0; }
+  .about-photo,.research-method,.contact-copy { position: relative; top: 0; }
   .focus-grid { grid-template-columns: 1fr; }
   .focus-card { min-height: 270px; }
   .focus-card h3 { margin-top: 48px; }
@@ -521,4 +530,5 @@ footer p:last-child { justify-self: end; }
   .hero-bottom { margin: 0 -20px; padding: 0 20px; grid-template-columns: repeat(6,auto); gap: 22px; }
   .hero-bottom p { white-space: nowrap; }
   .about-photo img { height: 360px; object-position: center 16%; }
+  .research-method { padding: 25px; box-shadow: 10px 10px 0 #dfe5e9; }
 }

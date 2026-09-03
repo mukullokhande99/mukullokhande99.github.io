@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=20260903-2">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -33,7 +33,7 @@
           <p class="hero-intro">My research uses hardware–software co-design to profile workloads, explore precision, design compute primitives, and integrate resource-efficient accelerators and RISC-V–hosted SoCs.</p>
           <div class="hero-actions">
             <a class="button primary" href="#silicon"><span>Explore selected work</span><b aria-hidden="true">↘</b></a>
-            <a class="button secondary" href="#publications"><span>Research archive</span><b aria-hidden="true">32</b></a>
+            <a class="button secondary" href="#publications"><span>Research archive</span><b id="hero-publication-total" aria-hidden="true">35</b></a>
           </div>
           <div class="home-credentials" aria-label="Current positions">
             <div><span>Current</span><strong>Qualcomm Technologies</strong><small>XR System Technology Architect</small></div>
@@ -66,12 +66,21 @@
       </div>
     </section>
 
-    <section class="metrics-bar" aria-label="Selected profile statistics"><div><strong>32</strong><span>listed works & patents</span></div><div><strong>5</strong><span>silicon systems</span></div><div><strong>4</strong><span>core research themes</span></div><div><strong>3 yrs</strong><span>IEEE CASS SBC Vice Chair</span></div></section>
+    <section class="metrics-bar" aria-label="Selected profile statistics"><div><strong id="publication-total">35</strong><span>listed works & patents</span></div><div><strong>5</strong><span>silicon systems</span></div><div><strong>4</strong><span>core research themes</span></div><div><strong>3 yrs</strong><span>IEEE CASS SBC Vice Chair</span></div></section>
 
     <section class="about content-section" id="about" aria-labelledby="about-title">
       <div class="section-heading reveal"><p class="eyebrow">01 · About</p><h2 id="about-title">From devices to deployable AI systems.</h2></div>
       <div class="about-layout">
-        <div class="about-photo reveal"><img src="images/migrated/profile.jpg" alt="Mukul Lokhande at his research workspace" width="1536" height="2048"></div>
+        <aside class="research-method reveal" aria-label="Research workflow">
+          <p class="method-kicker">Hardware–software codesign</p>
+          <h3>A research path from workload to silicon.</h3>
+          <ol>
+            <li><span>01</span><div><strong>Characterise</strong><small>Workload · dataset · model</small></div></li>
+            <li><span>02</span><div><strong>Explore</strong><small>Precision · quantisation</small></div></li>
+            <li><span>03</span><div><strong>Design</strong><small>Compute primitives</small></div></li>
+            <li><span>04</span><div><strong>Integrate</strong><small>Architecture · DSE · SoC</small></div></li>
+          </ol>
+        </aside>
         <div class="about-copy reveal">
           <p class="lead">I am a doctoral researcher at the Nanoscale Devices, VLSI Circuit and System Design (NSDCS) Research Lab, Department of Electrical Engineering, Indian Institute of Technology Indore.</p>
           <p>I joined Qualcomm Technologies Inc., Bangalore as an XR system technology architect in December 2025. My work is grounded in low-power reconfigurable computing, RISC-V-based SoC architecture, structured ASICs, and hardware–software codesign for domain-specific AI accelerators.</p>
@@ -110,8 +119,8 @@
 
     <section class="publications content-section" id="publications" aria-labelledby="publications-title">
       <div class="section-heading split reveal"><div><p class="eyebrow">04 · Publications</p><h2 id="publications-title">Research archive.</h2></div><p>Journals, conference papers, works in advanced revision, and patents—organised for quick scanning.</p></div>
-      <div class="publication-tools reveal"><label class="search-box"><span class="sr-only">Search publications</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="publication-search" type="search" placeholder="Search title, author, venue…" autocomplete="off"></label><div class="filter-group" role="group" aria-label="Filter publications"><button class="filter active" type="button" data-filter="all">All <span>32</span></button><button class="filter" type="button" data-filter="journal">Journals <span>8</span></button><button class="filter" type="button" data-filter="conference">Conferences <span>19</span></button><button class="filter" type="button" data-filter="patent">Patents <span>2</span></button><button class="filter" type="button" data-filter="advanced">Advanced stage <span>3</span></button></div></div>
-      <div class="publication-summary"><span id="result-count">32 works</span><span>2024—2026</span></div><div class="publication-list" id="publication-list" aria-live="polite"></div><p class="empty-state" id="empty-state" hidden>No publications match that search.</p>
+      <div class="publication-tools reveal"><label class="search-box"><span class="sr-only">Search publications</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="publication-search" type="search" placeholder="Search title, author, venue…" autocomplete="off"></label><div class="filter-group" role="group" aria-label="Filter publications"><button class="filter active" type="button" data-filter="all">All <span>35</span></button><button class="filter" type="button" data-filter="journal">Journals <span>8</span></button><button class="filter" type="button" data-filter="conference">Conferences <span>22</span></button><button class="filter" type="button" data-filter="patent">Patents <span>2</span></button><button class="filter" type="button" data-filter="advanced">Advanced stage <span>3</span></button></div></div>
+      <div class="publication-summary"><span id="result-count">35 works</span><span>2024—2026</span></div><div class="publication-list" id="publication-list" aria-live="polite"></div><p class="empty-state" id="empty-state" hidden>No publications match that search.</p>
     </section>
 
     <section class="service content-section" aria-labelledby="service-title"><div class="service-panel reveal"><p class="eyebrow">Community & service</p><h2 id="service-title">Research is a team sport.</h2><p>I served as Vice Chair of the IEEE CASS Student Branch Chapter at IIT Indore from December 2022 to December 2025 and continue to contribute as an active peer reviewer.</p><div class="venue-cloud"><span>IEEE TCAD</span><span>IEEE ESL</span><span>IEEE TVLSI</span><span>Elsevier JSA</span><span>ISCAS</span><span>APCCAS</span></div></div></section>
@@ -123,7 +132,7 @@
   </main>
 
   <footer><a class="brand" href="#top"><span class="brand-mark">ML</span><span>Mukul Lokhande</span></a><p>XR systems · reconfigurable computing · Edge AI</p><p>© <span id="year"></span> Mukul Lokhande</p></footer>
-  <script src="publications.js"></script>
-  <script src="index.js"></script>
+  <script src="publications.js?v=20260903-2"></script>
+  <script src="index.js?v=20260903-2"></script>
 </body>
 </html>
