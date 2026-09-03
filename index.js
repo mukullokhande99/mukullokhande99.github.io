@@ -11,7 +11,7 @@
   let activeYear = "all";
 
   const totals = publications.reduce((result, publication) => {
-    result.all += 1;
+    if (publication.type !== "advanced") result.all += 1;
     result[publication.type] = (result[publication.type] || 0) + 1;
     return result;
   }, { all: 0 });
@@ -24,7 +24,7 @@
     typeFilters.forEach(button => {
       const type = button.dataset.filter;
       const total = publications.filter(publication =>
-        (type === "all" || publication.type === type) &&
+        (type === "all" ? publication.type !== "advanced" : publication.type === type) &&
         (activeYear === "all" || publication.year === Number(activeYear))
       ).length;
       button.querySelector("span").textContent = total;
@@ -33,7 +33,7 @@
       const year = button.dataset.year;
       const total = publications.filter(publication =>
         (year === "all" || publication.year === Number(year)) &&
-        (activeFilter === "all" || publication.type === activeFilter)
+        (activeFilter === "all" ? publication.type !== "advanced" : publication.type === activeFilter)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -46,7 +46,7 @@
   const render = () => {
     const query = search.value.trim().toLowerCase();
     const matches = publications.filter(publication => {
-      const isType = activeFilter === "all" || publication.type === activeFilter;
+      const isType = activeFilter === "all" ? publication.type !== "advanced" : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
       return isType && isYear && haystack.includes(query);
@@ -62,7 +62,7 @@
       const impactFactor = publication.impactFactor || "NR";
       return `<article class="publication-item">
         <div class="pub-meta"><span class="pub-year">${publication.year}</span><span class="pub-type">${typeLabels[publication.type]}</span></div>
-        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}<div class="pub-metrics"><span>Quartile range: <strong>${escapeHTML(quartile)}</strong></span><span>Impact factor: <strong>${escapeHTML(impactFactor)}</strong></span></div></div>
+        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}<div class="pub-metrics"><span class="pub-metric">Quartile range: <strong>${escapeHTML(quartile)}</strong></span><span class="pub-metric">Impact factor: <strong>${escapeHTML(impactFactor)}</strong></span></div></div>
         ${link}
       </article>`;
     }).join("");
