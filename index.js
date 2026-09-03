@@ -16,9 +16,14 @@
     return result;
   }, { all: 0 });
 
-  [document.querySelector("#publication-total"), document.querySelector("#hero-publication-total")]
-    .filter(Boolean)
-    .forEach(element => { element.textContent = totals.all; });
+  const paperTotal = publications.filter(publication => publication.type === "journal" || publication.type === "conference").length;
+  const patentTotal = publications.filter(publication => publication.type === "patent").length;
+  const heroPublicationTotal = document.querySelector("#hero-publication-total");
+  const paperTotalElement = document.querySelector("#paper-total");
+  const patentTotalElement = document.querySelector("#patent-total");
+  if (heroPublicationTotal) heroPublicationTotal.textContent = totals.all;
+  if (paperTotalElement) paperTotalElement.textContent = paperTotal;
+  if (patentTotalElement) patentTotalElement.textContent = patentTotal;
 
   const updateFilterCounts = () => {
     typeFilters.forEach(button => {
@@ -60,9 +65,12 @@
         : `<span class="pub-link disabled" aria-hidden="true">·</span>`;
       const quartile = publication.quartile || "NR";
       const impactFactor = publication.impactFactor || "NR";
+      const journalMetrics = publication.type === "journal" || publication.type === "advanced"
+        ? `<div class="pub-metrics"><span class="pub-metric">SJR best quartile: <strong>${escapeHTML(quartile)}</strong></span><span class="pub-metric">JCR impact factor: <strong>${escapeHTML(impactFactor)}</strong></span></div>`
+        : "";
       return `<article class="publication-item">
         <div class="pub-meta"><span class="pub-year">${publication.year}</span><span class="pub-type">${typeLabels[publication.type]}</span></div>
-        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}<div class="pub-metrics"><span class="pub-metric">Quartile range: <strong>${escapeHTML(quartile)}</strong></span><span class="pub-metric">Impact factor: <strong>${escapeHTML(impactFactor)}</strong></span></div></div>
+        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}${journalMetrics}</div>
         ${link}
       </article>`;
     }).join("");

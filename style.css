@@ -74,9 +74,14 @@ button { color: inherit; }
 .signal-bars i:nth-child(2) { height: 74%; animation-delay: -.3s; }.signal-bars i:nth-child(3){height:48%;animation-delay:-.5s}.signal-bars i:nth-child(4){height:92%;animation-delay:-.8s}.signal-bars i:nth-child(5){height:64%;animation-delay:-.2s}.signal-bars i:nth-child(6){height:40%;animation-delay:-.7s}.signal-bars i:nth-child(7){height:82%;animation-delay:-.4s}
 @keyframes signal { to { height: 95%; } }
 
-.metrics-bar { display: grid; grid-template-columns: repeat(4,1fr); max-width: var(--max); margin: 0 auto; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
-.metrics-bar div { min-height: 130px; padding: 30px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid var(--line); }
-.metrics-bar div:last-child { border: 0; }
+.metrics-bar { display: grid; grid-template-columns: minmax(235px,1.35fr) repeat(5,minmax(0,1fr)); gap: 1px; max-width: var(--max); margin: 0 auto; border: 1px solid var(--line); background: var(--line); }
+.metrics-bar > div { min-height: 144px; padding: 27px; display: flex; flex-direction: column; justify-content: center; background: var(--white); }
+.metrics-bar .impact-heading { align-items: flex-start; background: var(--ink); color: var(--white); }
+.impact-heading p { margin: 0 0 10px; color: var(--cyan); font: 600 .62rem/1.2 "IBM Plex Mono",monospace; letter-spacing: .11em; text-transform: uppercase; }
+.impact-heading h2 { margin: 0; font: 700 1.08rem/1.32 "Manrope",sans-serif; letter-spacing: -.02em; }
+.impact-heading a { margin-top: 13px; color: #a9b8c8; font: 500 .61rem/1.35 "IBM Plex Mono",monospace; text-transform: uppercase; }
+.impact-heading a:hover { color: var(--acid); }
+.metrics-bar small { margin-top: 7px; color: #8995a3; font: 500 .61rem/1.35 "IBM Plex Mono",monospace; text-transform: uppercase; }
 .metrics-bar strong { font: 700 2.15rem/1 "Manrope", sans-serif; letter-spacing: -.05em; }
 .metrics-bar span { margin-top: 10px; color: var(--muted); font: 500 .7rem/1.35 "IBM Plex Mono", monospace; text-transform: uppercase; letter-spacing: .07em; }
 
@@ -207,7 +212,8 @@ footer p:last-child { justify-self: end; }
   .section-grid { grid-template-columns: 1fr; }
   .hero-copy { padding-left: max(28px,calc((100vw - 850px)/2)); }
   .hero-visual { min-height: 660px; border-left: 0; border-top: 1px solid #2d3c51; }
-  .metrics-bar { grid-template-columns: repeat(2,1fr); }.metrics-bar div:nth-child(2){border-right:0}.metrics-bar div:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .metrics-bar { grid-template-columns: repeat(3,1fr); }
+  .metrics-bar .impact-heading { min-height: 122px; grid-column: 1/-1; }
   .focus-grid { grid-template-columns: repeat(2,1fr); }
   .silicon-card,.silicon-card.featured { grid-template-columns: 1fr; }
   .silicon-image { min-height: 350px; }
@@ -224,8 +230,10 @@ footer p:last-child { justify-self: end; }
   .hero-visual { min-height: 560px; }
   .portrait-frame { height: 90%; width: 88%; }
   .signal-card { width: 188px; right: 18px; bottom: 38px; box-shadow: 10px 10px 0 var(--blue); }
-  .metrics-bar { margin: 0 18px; }
-  .metrics-bar div { min-height: 112px; padding: 22px; }
+  .metrics-bar { grid-template-columns: repeat(2,1fr); margin: 0 18px; }
+  .metrics-bar > div { min-height: 126px; padding: 22px; }
+  .metrics-bar .impact-heading { min-height: 132px; }
+  .metrics-bar > div:last-child { grid-column: 1/-1; }
   .metrics-bar strong { font-size: 1.75rem; }
   .content-section { padding: 82px 22px; }
   .section-heading { margin-bottom: 40px; }
@@ -498,7 +506,7 @@ footer p:last-child { justify-self: end; }
 .scroll-cue { justify-self: end; display: flex; align-items: center; gap: 10px; color: var(--white)!important; }
 .scroll-cue span { width: 29px; height: 29px; display: grid; place-items: center; border: 1px solid #41536a; color: var(--acid); }
 
-.metrics-bar { background: var(--white); box-shadow: 0 18px 48px rgba(18,36,58,.06); }
+.metrics-bar { box-shadow: 0 18px 48px rgba(18,36,58,.06); }
 .metrics-bar strong { color: var(--blue); }
 
 /* Fluid wide-screen scale. This also keeps the composition readable when a
