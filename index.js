@@ -53,7 +53,7 @@
     const matches = publications.filter(publication => {
       const isType = activeFilter === "all" ? publication.type !== "advanced" : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
-      const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing].join(" ").toLowerCase();
+      const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
       return isType && isYear && haystack.includes(query);
     });
 
@@ -66,9 +66,12 @@
       const journalIndexing = publication.type === "journal" || publication.type === "advanced"
         ? `<div class="pub-indexing"><span>${publication.type === "advanced" ? "Target venue indexing" : "Venue indexing"}</span><strong>${escapeHTML(publication.indexing || "NR")}</strong></div>`
         : "";
+      const journalMetrics = publication.type === "journal" || publication.type === "advanced"
+        ? `<div class="pub-metrics" aria-label="${publication.type === "advanced" ? "Target venue metrics" : "Journal metrics"}"><span class="pub-metric"><span>SJR quartile (${escapeHTML(publication.quartileYear || "NR")})</span><strong>${escapeHTML(publication.quartile || "NR")}</strong></span><span class="pub-metric"><span>JCR impact factor (${escapeHTML(publication.impactFactorYear || "NR")})</span><strong>${escapeHTML(publication.impactFactor || "NR")}</strong></span></div>`
+        : "";
       return `<article class="publication-item">
         <div class="pub-meta"><span class="pub-year">${publication.year}</span><span class="pub-type">${typeLabels[publication.type]}</span></div>
-        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}${journalIndexing}</div>
+        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status">${escapeHTML(publication.status)}</span>` : ""}${journalIndexing}${journalMetrics}</div>
         ${link}
       </article>`;
     }).join("");
