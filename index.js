@@ -72,6 +72,29 @@
     nav.classList.remove("open");
   }));
 
+  const scrollToHash = (hash = window.location.hash) => {
+    const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+    if (!hash || hash === "#top") {
+      window.scrollTo({ top: 0, behavior });
+      return;
+    }
+    const target = document.querySelector(hash);
+    if (target) target.scrollIntoView({ behavior, block: "start" });
+  };
+
+  document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener("click", event => {
+    const hash = link.getAttribute("href");
+    if (!hash || !document.querySelector(hash === "#top" ? "#top" : hash)) return;
+    event.preventDefault();
+    if (window.location.hash !== hash) history.pushState(null, "", hash);
+    scrollToHash(hash);
+  }));
+
+  window.addEventListener("hashchange", () => scrollToHash());
+  window.addEventListener("load", () => {
+    if (window.location.hash) window.setTimeout(() => scrollToHash(), 80);
+  });
+
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
