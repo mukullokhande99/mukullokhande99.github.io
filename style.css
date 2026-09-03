@@ -433,36 +433,6 @@ footer p:last-child { justify-self: end; }
   letter-spacing: .1em;
 }
 .portrait-index span:first-child { color: var(--acid); }
-.architecture-card {
-  width: min(350px,77%);
-  position: absolute;
-  z-index: 5;
-  left: -54px;
-  bottom: 10px;
-  background: #f8fafb;
-  color: var(--ink);
-  border-top: 4px solid var(--acid);
-  box-shadow: 0 22px 45px rgba(0,0,0,.29);
-}
-.architecture-head {
-  min-height: 48px;
-  padding: 0 15px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #d8e0e5;
-  font: 600 .65rem/1 "IBM Plex Mono",monospace;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-}
-.architecture-head b { color: var(--blue); font-weight: 600; }
-.architecture-card ol { list-style: none; margin: 0; padding: 0; }
-.architecture-card li { min-height: 58px; padding: 9px 15px; display: grid; grid-template-columns: 27px 1fr; gap: 11px; align-items: center; border-bottom: 1px solid #e1e6ea; }
-.architecture-card li:last-child { border: 0; }
-.architecture-card li>span { color: var(--blue); font: 600 .61rem/1 "IBM Plex Mono",monospace; }
-.architecture-card li div { display: grid; gap: 3px; }
-.architecture-card small { color: #7b8795; font: 500 .59rem/1.2 "IBM Plex Mono",monospace; text-transform: uppercase; }
-.architecture-card strong { font: 700 .82rem/1.2 "Manrope",sans-serif; }
 .visual-code {
   position: absolute;
   right: -16px;
@@ -506,7 +476,6 @@ footer p:last-child { justify-self: end; }
   .home-hero .hero-intro { max-width: 720px; }
   .home-visual { min-height: min(760px, calc(100vh - 190px)); }
   .profile-panel { width: min(88%,600px); height: min(680px,66vh); }
-  .architecture-card { width: min(390px,72%); }
   .hero-bottom { min-height: 70px; }
 }
 
@@ -520,7 +489,6 @@ footer p:last-child { justify-self: end; }
   .home-hero .hero-intro { max-width: 780px; }
   .home-visual { min-height: min(860px, calc(100vh - 235px)); }
   .profile-panel { width: min(90%,680px); height: min(760px,64vh); }
-  .architecture-card { width: min(430px,70%); }
   .hero-bottom { min-height: 78px; }
 }
 
@@ -531,7 +499,6 @@ footer p:last-child { justify-self: end; }
   .home-hero h1 { font-size: clamp(4.4rem,12vw,7rem); }
   .home-visual { min-height: 670px; justify-content: center; }
   .profile-panel { width: min(72%,520px); height: 600px; }
-  .architecture-card { left: max(0px,calc(50% - 360px)); bottom: 12px; }
   .visual-code { right: 24px; }
   .hero-bottom { grid-template-columns: 120px repeat(5,auto); overflow-x: auto; }
   .scroll-cue { display: none; }
@@ -552,9 +519,8 @@ footer p:last-child { justify-self: end; }
   .home-credentials { grid-template-columns: 1fr; }
   .home-credentials div { padding-right: 0; }
   .home-credentials div+div { padding-left: 0; border-left: 0; border-top: 1px solid #2c3b4f; }
-  .home-visual { min-height: 650px; padding-bottom: 18px; align-items: start; }
+  .home-visual { min-height: 540px; padding-bottom: 18px; align-items: start; }
   .profile-panel { width: 91%; height: 480px; margin-top: 20px; }
-  .architecture-card { width: 91%; left: auto; right: 0; bottom: 28px; }
   .visual-code { display: none; }
   .hero-bottom { margin: 0 -20px; padding: 0 20px; grid-template-columns: repeat(6,auto); gap: 22px; }
   .hero-bottom p { white-space: nowrap; }
