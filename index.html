@@ -10,14 +10,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260903-8">
+  <link rel="stylesheet" href="style.css?v=20260903-9">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Mukul Lokhande, home"><span class="brand-mark">ML</span><span>Mukul Lokhande</span></a>
+    <a class="brand" href="#top" aria-label="Mukul Lokhande, home"><span class="brand-mark">ML</span><span class="brand-copy"><strong>Mukul Lokhande</strong><small>XR Architect · Edge-AI</small></span></a>
     <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
-    <nav id="site-nav" aria-label="Primary navigation"><a href="#about">About</a><a href="#focus">Focus</a><a href="#silicon">Silicon</a><a href="#publications">Publications</a><a href="#contact">Contact</a></nav>
+    <nav id="site-nav" aria-label="Primary navigation"><a href="#about">Profile</a><a href="#experience">Experience</a><a href="#focus">Research</a><a href="#silicon">Silicon</a><a href="#publications">Publications</a><a href="#contact">Contact</a></nav>
     <a class="header-link" href="https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao" target="_blank" rel="noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
   </header>
 
@@ -31,6 +31,7 @@
           <h1 id="hero-title">Mukul <span>Lokhande.</span></h1>
           <p class="hero-role">XR System Technology Architect <i>×</i> Edge-AI Researcher</p>
           <p class="hero-intro">My research uses hardware–software co-design to profile workloads, explore precision, design compute primitives, and integrate resource-efficient accelerators and RISC-V–hosted SoCs.</p>
+          <ul class="research-tags" aria-label="Research interests"><li>XR systems</li><li>Edge AI</li><li>RISC-V</li><li>Digital CIM</li><li>Mixed precision</li></ul>
           <div class="hero-actions">
             <a class="button primary" href="#silicon"><span>Explore selected work</span><b aria-hidden="true">↘</b></a>
             <a class="button secondary" href="#publications"><span>Research archive</span><b id="hero-publication-total" aria-hidden="true">32</b></a>
@@ -76,7 +77,7 @@
           <p class="lead">I am a doctoral researcher at the Nanoscale Devices, VLSI Circuit and System Design (NSDCS) Research Lab, Department of Electrical Engineering, Indian Institute of Technology Indore.</p>
           <p>I joined Qualcomm Technologies Inc., Bangalore as an XR system technology architect in December 2025. My work is grounded in low-power reconfigurable computing, RISC-V-based SoC architecture, structured ASICs, and hardware–software codesign for domain-specific AI accelerators.</p>
           <p>I have collaborated across several publications and actively review for IEEE TCAD, ESL, TVLSI, Elsevier JSA, ISCAS, APCCAS, and related venues.</p>
-          <div class="timeline" aria-label="Career timeline">
+          <div class="timeline" id="experience" aria-label="Career timeline">
             <article><time>2025—Now</time><div><h3>XR System Technology Architect</h3><p>Qualcomm Technologies Inc., Bangalore</p></div></article>
             <article><time>Doctoral</time><div><h3>PhD Researcher</h3><p>NSDCS Research Lab, IIT Indore · thesis submitted Dec 2025</p></div></article>
             <article><time>Research</time><div><h3>Processor Architecture Research Intern</h3><p>Intel Labs, Bengaluru</p></div></article>
@@ -117,7 +118,7 @@
           <div class="filter-row"><span class="filter-label">Year</span><div class="filter-group year-filter-group" role="group" aria-label="Filter publications by year"><button class="filter year-filter active" type="button" data-year="all" aria-pressed="true">All years <span>32</span></button><button class="filter year-filter" type="button" data-year="2026" aria-pressed="false">2026 <span>19</span></button><button class="filter year-filter" type="button" data-year="2025" aria-pressed="false">2025 <span>12</span></button><button class="filter year-filter" type="button" data-year="2024" aria-pressed="false">2024 <span>1</span></button></div></div>
         </div>
       </div>
-      <div class="publication-summary"><span id="result-count">32 works</span><span>Journals: 2024 JCR · conferences: SJR where ranked · impact factor unavailable: NR</span></div><div class="publication-list" id="publication-list" aria-live="polite"></div><p class="empty-state" id="empty-state" hidden>No publications match that search.</p>
+      <div class="publication-summary"><span id="result-count">32 works</span><span>Quartiles: SCImago 2025 SJR · impact factors: 2024 JCR · unavailable metrics: NR</span></div><div class="publication-list" id="publication-list" aria-live="polite"></div><p class="empty-state" id="empty-state" hidden>No publications match that search.</p>
     </section>
 
     <section class="service content-section" aria-labelledby="service-title"><div class="service-panel reveal"><p class="eyebrow">Community & service</p><h2 id="service-title">Research is a team sport.</h2><p>I served as Vice Chair of the IEEE CASS Student Branch Chapter at IIT Indore from December 2022 to December 2025 and continue to contribute as an active peer reviewer.</p><div class="venue-cloud"><span>IEEE TCAD</span><span>IEEE ESL</span><span>IEEE TVLSI</span><span>Elsevier JSA</span><span>ISCAS</span><span>APCCAS</span></div></div></section>
@@ -129,7 +130,7 @@
   </main>
 
   <footer><a class="brand" href="#top"><span class="brand-mark">ML</span><span>Mukul Lokhande</span></a><p>XR systems · reconfigurable computing · Edge AI</p><p>© <span id="year"></span> Mukul Lokhande</p></footer>
-  <script src="publications.js?v=20260903-8"></script>
-  <script src="index.js?v=20260903-8"></script>
+  <script src="publications.js?v=20260903-9"></script>
+  <script src="index.js?v=20260903-9"></script>
 </body>
 </html>

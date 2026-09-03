@@ -104,6 +104,34 @@
     nav.classList.remove("open");
   }));
 
+  const navTargets = [...nav.querySelectorAll('a[href^="#"]')]
+    .map(link => ({ link, target: document.querySelector(link.getAttribute("href")) }))
+    .filter(item => item.target);
+  let navTicking = false;
+  const updateActiveNav = () => {
+    const headerOffset = document.querySelector(".site-header").offsetHeight + 72;
+    const position = window.scrollY + headerOffset;
+    let current = null;
+    navTargets.forEach(item => {
+      if (item.target.offsetTop <= position) current = item;
+    });
+    navTargets.forEach(item => {
+      const active = item === current;
+      item.link.classList.toggle("active", active);
+      if (active) item.link.setAttribute("aria-current", "location");
+      else item.link.removeAttribute("aria-current");
+    });
+    navTicking = false;
+  };
+  const queueActiveNavUpdate = () => {
+    if (!navTicking) {
+      navTicking = true;
+      window.requestAnimationFrame(updateActiveNav);
+    }
+  };
+  window.addEventListener("scroll", queueActiveNavUpdate, { passive: true });
+  window.addEventListener("resize", queueActiveNavUpdate);
+
   const scrollToHash = (hash = window.location.hash) => {
     const behavior = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
     if (!hash || hash === "#top") {
@@ -125,6 +153,7 @@
   window.addEventListener("hashchange", () => scrollToHash());
   window.addEventListener("load", () => {
     if (window.location.hash) window.setTimeout(() => scrollToHash(), 80);
+    updateActiveNav();
   });
 
   const revealObserver = new IntersectionObserver(entries => {
