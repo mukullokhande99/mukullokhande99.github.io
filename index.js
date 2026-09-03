@@ -48,6 +48,13 @@
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
   })[character]);
 
+  const monthNumbers = { jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5, jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11 };
+  const publicationTimestamp = publication => {
+    const dateMatch = publication.venue.match(/\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?\s+(?:(\d{1,2})(?:\s*[–-]\s*\d{1,2})?,?\s+)?(\d{4})\b/i);
+    if (!dateMatch) return Date.UTC(publication.year, 0, 1);
+    return Date.UTC(Number(dateMatch[3]), monthNumbers[dateMatch[1].slice(0, 3).toLowerCase()], Number(dateMatch[2] || 1));
+  };
+
   const render = () => {
     const query = search.value.trim().toLowerCase();
     const matches = publications.filter(publication => {
@@ -55,7 +62,7 @@
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
       return isType && isYear && haystack.includes(query);
-    });
+    }).sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
 
     count.textContent = `${matches.length} ${matches.length === 1 ? "work" : "works"}`;
     empty.hidden = matches.length !== 0;
