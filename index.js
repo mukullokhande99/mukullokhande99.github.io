@@ -4,9 +4,11 @@
   const search = document.querySelector("#publication-search");
   const count = document.querySelector("#result-count");
   const empty = document.querySelector("#empty-state");
-  const filters = [...document.querySelectorAll(".filter")];
+  const typeFilters = [...document.querySelectorAll(".type-filter")];
+  const yearFilters = [...document.querySelectorAll(".year-filter")];
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
+  let activeYear = "all";
 
   const totals = publications.reduce((result, publication) => {
     result.all += 1;
@@ -14,13 +16,28 @@
     return result;
   }, { all: 0 });
 
-  filters.forEach(button => {
-    const badge = button.querySelector("span");
-    if (badge) badge.textContent = totals[button.dataset.filter] || 0;
-  });
   [document.querySelector("#publication-total"), document.querySelector("#hero-publication-total")]
     .filter(Boolean)
     .forEach(element => { element.textContent = totals.all; });
+
+  const updateFilterCounts = () => {
+    typeFilters.forEach(button => {
+      const type = button.dataset.filter;
+      const total = publications.filter(publication =>
+        (type === "all" || publication.type === type) &&
+        (activeYear === "all" || publication.year === Number(activeYear))
+      ).length;
+      button.querySelector("span").textContent = total;
+    });
+    yearFilters.forEach(button => {
+      const year = button.dataset.year;
+      const total = publications.filter(publication =>
+        (year === "all" || publication.year === Number(year)) &&
+        (activeFilter === "all" || publication.type === activeFilter)
+      ).length;
+      button.querySelector("span").textContent = total;
+    });
+  };
 
   const escapeHTML = (value = "") => value.replace(/[&<>"']/g, character => ({
     "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
@@ -30,8 +47,9 @@
     const query = search.value.trim().toLowerCase();
     const matches = publications.filter(publication => {
       const isType = activeFilter === "all" || publication.type === activeFilter;
+      const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status].join(" ").toLowerCase();
-      return isType && haystack.includes(query);
+      return isType && isYear && haystack.includes(query);
     });
 
     count.textContent = `${matches.length} ${matches.length === 1 ? "work" : "works"}`;
@@ -48,13 +66,25 @@
     }).join("");
   };
 
-  filters.forEach(button => button.addEventListener("click", () => {
+  typeFilters.forEach(button => button.addEventListener("click", () => {
     activeFilter = button.dataset.filter;
-    filters.forEach(candidate => {
+    typeFilters.forEach(candidate => {
       const selected = candidate === button;
       candidate.classList.toggle("active", selected);
       candidate.setAttribute("aria-pressed", String(selected));
     });
+    updateFilterCounts();
+    render();
+  }));
+
+  yearFilters.forEach(button => button.addEventListener("click", () => {
+    activeYear = button.dataset.year;
+    yearFilters.forEach(candidate => {
+      const selected = candidate === button;
+      candidate.classList.toggle("active", selected);
+      candidate.setAttribute("aria-pressed", String(selected));
+    });
+    updateFilterCounts();
     render();
   }));
 
@@ -106,5 +136,6 @@
 
   document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
   document.querySelector("#year").textContent = new Date().getFullYear();
+  updateFilterCounts();
   render();
 })();
