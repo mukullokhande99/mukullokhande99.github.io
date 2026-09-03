@@ -71,7 +71,7 @@
         ? `<a class="pub-link" href="${escapeHTML(publication.url)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHTML(publication.title)}">↗</a>`
         : `<span class="pub-link disabled" aria-hidden="true">·</span>`;
       const journalIndexing = publication.type === "journal" || publication.type === "advanced"
-        ? `<div class="pub-indexing"><span>${publication.type === "advanced" ? "Target venue indexing" : "Venue indexing"}</span><strong>${escapeHTML(publication.indexing || "NR")}</strong></div>`
+        ? `<div class="pub-indexing"><span>Venue indexing</span><strong>${escapeHTML(publication.indexing || "NR")}</strong></div>`
         : "";
       const journalMetrics = publication.type === "journal" || publication.type === "advanced"
         ? `<div class="pub-metrics" aria-label="${publication.type === "advanced" ? "Target venue metrics" : "Journal metrics"}"><span class="pub-metric"><span>Quartile range</span><strong>${escapeHTML(publication.quartile || "NR")}</strong></span><span class="pub-metric"><span>Impact factor</span><strong>${escapeHTML(publication.impactFactor || "NR")}</strong></span></div>`
