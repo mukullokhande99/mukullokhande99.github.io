@@ -59,7 +59,7 @@ def extract_articles(payload: dict) -> list[dict]:
         cited_by = article.get("cited_by") if isinstance(article.get("cited_by"), dict) else {}
         articles.append({
             "title": str(article["title"]).strip(),
-            "citations": int(cited_by.get("value", 0)),
+            "citations": int(cited_by.get("value") or 0),
             "cited_by_url": cited_by.get("link", ""),
         })
     articles.sort(key=lambda article: article["title"].casefold())
