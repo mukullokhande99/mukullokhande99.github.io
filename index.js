@@ -292,6 +292,7 @@
     {
       name: "Adam Teman",
       aliases: ["Adam Teman"],
+      rankPriority: 0,
       affiliation: "Bar-Ilan University, Israel",
       affiliationUrl: "https://www.eng.biu.ac.il/temanad/",
       logoDomain: "biu.ac.il",
@@ -308,6 +309,7 @@
     {
       name: "Ratko Pilipović",
       aliases: ["Ratko Pilipović", "Ratko Pilipovic"],
+      rankPriority: 1,
       affiliation: "University of Ljubljana, Slovenia",
       affiliationUrl: "https://fri.uni-lj.si/en/about-faculty/employees/ratko-pilipovic",
       logoDomain: "uni-lj.si",
@@ -364,10 +366,13 @@
       const publishedCount = works.filter(publication => publication.type !== "advanced").length;
       const advancedCount = works.length - publishedCount;
       return { ...profile, works, publishedCount, advancedCount, profileOrder };
-    }).sort((a, b) =>
-      b.works.length - a.works.length ||
-      a.profileOrder - b.profileOrder
-    );
+    }).sort((a, b) => {
+      const aPriority = a.rankPriority ?? Number.MAX_SAFE_INTEGER;
+      const bPriority = b.rankPriority ?? Number.MAX_SAFE_INTEGER;
+      return aPriority - bPriority ||
+        b.works.length - a.works.length ||
+        a.profileOrder - b.profileOrder;
+    });
 
     collaborationList.innerHTML = rankedCollaborators.map((profile, index) => {
       const countParts = [`${profile.publishedCount} published`];
