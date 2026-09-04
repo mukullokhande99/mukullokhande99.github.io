@@ -10,20 +10,27 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260904-1">
+  <link rel="stylesheet" href="style.css?v=20260904-2">
 </head>
-<body>
+<body data-spatial="on">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
     <a class="brand" href="#top" aria-label="Mukul Lokhande, home"><span class="brand-mark">ML</span><span class="brand-copy"><strong>Mukul Lokhande</strong><small>XR Architect · Edge-AI</small></span></a>
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
     <nav id="site-nav" aria-label="Primary navigation"><a href="#about">Profile</a><a href="#experience">Experience</a><a href="#focus">Research</a><a href="#silicon">Silicon</a><a href="#publications">Publications</a><a href="#contact">Contact</a></nav>
-    <a class="header-link" href="https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao" target="_blank" rel="noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
+    <div class="header-actions">
+      <button class="spatial-toggle" type="button" aria-pressed="true" aria-label="Turn off spatial interface">
+        <span class="spatial-toggle-icon" aria-hidden="true"><i></i></span>
+        <span class="spatial-toggle-copy"><small>Interface</small><strong>Spatial on</strong></span>
+      </button>
+      <a class="header-link" href="https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao" target="_blank" rel="noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open navigation"><span></span><span></span></button>
+    </div>
   </header>
 
   <main id="main">
     <section class="hero home-hero" aria-labelledby="hero-title">
       <div class="hero-circuit" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="spatial-frame" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="hero-stage">
         <div class="home-intro reveal">
           <p class="eyebrow"><span class="status-dot"></span> Bengaluru · India</p>
@@ -43,6 +50,9 @@
         </div>
 
         <div class="home-visual reveal">
+          <div class="spatial-orbit" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="spatial-axis axis-top" aria-hidden="true"><span>VIEW / 01</span><b></b></div>
+          <div class="spatial-axis axis-side" aria-hidden="true"><span>HW–SW CO-DESIGN</span><b></b></div>
           <figure class="profile-panel">
             <div class="portrait-index" aria-hidden="true"><span>01</span><span>PROFILE</span></div>
             <img src="images/migrated/bio-hero.jpg" alt="Portrait of Mukul Lokhande" width="977" height="978">
@@ -139,6 +149,6 @@
 
   <footer><a class="brand" href="#top"><span class="brand-mark">ML</span><span>Mukul Lokhande</span></a><p>XR systems · reconfigurable computing · Edge AI</p><p>© <span id="year"></span> Mukul Lokhande</p></footer>
   <script src="publications.js?v=20260903-13"></script>
-  <script src="index.js?v=20260904-4"></script>
+  <script src="index.js?v=20260904-5"></script>
 </body>
 </html>

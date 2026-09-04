@@ -6,10 +6,63 @@
   const empty = document.querySelector("#empty-state");
   const typeFilters = [...document.querySelectorAll(".type-filter")];
   const yearFilters = [...document.querySelectorAll(".year-filter")];
+  const spatialToggle = document.querySelector(".spatial-toggle");
+  const spatialToggleLabel = spatialToggle?.querySelector("strong");
+  const spatialStage = document.querySelector(".home-hero");
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
   let activeYear = "all";
   let scholarArticles = [];
+
+  const readSpatialPreference = () => {
+    try {
+      return window.localStorage.getItem("spatial-interface") !== "off";
+    } catch (_error) {
+      return true;
+    }
+  };
+
+  const setSpatialMode = enabled => {
+    document.body.dataset.spatial = enabled ? "on" : "off";
+    if (!spatialToggle) return;
+    spatialToggle.setAttribute("aria-pressed", String(enabled));
+    spatialToggle.setAttribute("aria-label", `${enabled ? "Turn off" : "Turn on"} spatial interface`);
+    if (spatialToggleLabel) spatialToggleLabel.textContent = enabled ? "Spatial on" : "Spatial off";
+  };
+
+  setSpatialMode(readSpatialPreference());
+
+  spatialToggle?.addEventListener("click", () => {
+    const enabled = document.body.dataset.spatial !== "on";
+    setSpatialMode(enabled);
+    try {
+      window.localStorage.setItem("spatial-interface", enabled ? "on" : "off");
+    } catch (_error) {
+      // The control still works for this page view when storage is unavailable.
+    }
+  });
+
+  if (spatialStage && window.matchMedia("(pointer: fine)").matches) {
+    const resetSpatialPosition = () => {
+      spatialStage.style.setProperty("--look-x", "0px");
+      spatialStage.style.setProperty("--look-y", "0px");
+      spatialStage.style.setProperty("--tilt-x", "0deg");
+      spatialStage.style.setProperty("--tilt-y", "0deg");
+    };
+    spatialStage.addEventListener("pointermove", event => {
+      if (document.body.dataset.spatial !== "on" || reducedMotion.matches) return;
+      const bounds = spatialStage.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - .5;
+      const y = (event.clientY - bounds.top) / bounds.height - .5;
+      spatialStage.style.setProperty("--look-x", `${(x * 7).toFixed(2)}px`);
+      spatialStage.style.setProperty("--look-y", `${(y * 5).toFixed(2)}px`);
+      spatialStage.style.setProperty("--tilt-x", `${(x * 1.15).toFixed(2)}deg`);
+      spatialStage.style.setProperty("--tilt-y", `${(y * -.9).toFixed(2)}deg`);
+    }, { passive: true });
+    spatialStage.addEventListener("pointerleave", resetSpatialPosition);
+    reducedMotion.addEventListener?.("change", resetSpatialPosition);
+  }
 
   const normalizeTitle = (value = "") => String(value)
     .normalize("NFKD")
