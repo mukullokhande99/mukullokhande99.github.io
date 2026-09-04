@@ -10,6 +10,12 @@
   const spatialToggle = document.querySelector(".spatial-toggle");
   const spatialToggleLabel = spatialToggle?.querySelector("strong");
   const spatialStage = document.querySelector(".home-hero");
+  const spatialLab = document.querySelector(".home-visual");
+  const labNodes = [...document.querySelectorAll(".lab-node")];
+  const labReadoutIndex = document.querySelector("#lab-readout-index");
+  const labReadoutTitle = document.querySelector("#lab-readout-title");
+  const labReadoutCopy = document.querySelector("#lab-readout-copy");
+  const labReadout = document.querySelector("#lab-readout");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
@@ -28,8 +34,8 @@
     document.body.dataset.spatial = enabled ? "on" : "off";
     if (!spatialToggle) return;
     spatialToggle.setAttribute("aria-pressed", String(enabled));
-    spatialToggle.setAttribute("aria-label", `${enabled ? "Turn off" : "Turn on"} spatial interface`);
-    if (spatialToggleLabel) spatialToggleLabel.textContent = enabled ? "Spatial on" : "Spatial off";
+    spatialToggle.setAttribute("aria-label", `${enabled ? "Turn off" : "Turn on"} spatial depth`);
+    if (spatialToggleLabel) spatialToggleLabel.textContent = enabled ? "Depth on" : "Depth off";
   };
 
   setSpatialMode(readSpatialPreference());
@@ -58,16 +64,63 @@
       const y = (event.clientY - bounds.top) / bounds.height - .5;
       spatialStage.style.setProperty("--look-x", `${(x * 10).toFixed(2)}px`);
       spatialStage.style.setProperty("--look-y", `${(y * 8).toFixed(2)}px`);
-      spatialStage.style.setProperty("--tilt-x", `${(x * 3.2).toFixed(2)}deg`);
-      spatialStage.style.setProperty("--tilt-y", `${(y * -2.6).toFixed(2)}deg`);
+      spatialStage.style.setProperty("--tilt-x", `${(x * 2.4).toFixed(2)}deg`);
+      spatialStage.style.setProperty("--tilt-y", `${(y * -1.8).toFixed(2)}deg`);
     }, { passive: true });
     spatialStage.addEventListener("pointerleave", resetSpatialPosition);
     reducedMotion.addEventListener?.("change", resetSpatialPosition);
   }
 
+  const labModes = {
+    sense: {
+      index: "Layer 01 · Sense",
+      title: "Characterise perception workloads",
+      copy: "Profile datasets, temporal behaviour, and model bottlenecks before committing to hardware."
+    },
+    compute: {
+      index: "Layer 02 · Compute",
+      title: "Explore precision and compute primitives",
+      copy: "Map mixed-precision arithmetic, SIMD execution, CORDIC datapaths, and efficient memory movement."
+    },
+    integrate: {
+      index: "Layer 03 · Integrate",
+      title: "Build accelerator-ready RISC-V systems",
+      copy: "Connect specialised engines, memory, control, and software into deployable XR and Edge-AI SoCs."
+    }
+  };
+
+  const selectLabMode = mode => {
+    const content = labModes[mode];
+    if (!content || !spatialLab) return;
+    spatialLab.dataset.labMode = mode;
+    labNodes.forEach(node => {
+      const active = node.dataset.labMode === mode;
+      node.classList.toggle("active", active);
+      node.setAttribute("aria-selected", String(active));
+      node.tabIndex = active ? 0 : -1;
+    });
+    if (labReadoutIndex) labReadoutIndex.textContent = content.index;
+    if (labReadoutTitle) labReadoutTitle.textContent = content.title;
+    if (labReadoutCopy) labReadoutCopy.textContent = content.copy;
+    if (labReadout) labReadout.setAttribute("aria-labelledby", `lab-mode-${mode}`);
+  };
+
+  labNodes.forEach((node, index) => {
+    node.addEventListener("click", () => selectLabMode(node.dataset.labMode));
+    node.addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const delta = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+      const nextIndex = event.key === "Home" ? 0 : event.key === "End" ? labNodes.length - 1 : (index + delta + labNodes.length) % labNodes.length;
+      labNodes[nextIndex].focus();
+      selectLabMode(labNodes[nextIndex].dataset.labMode);
+    });
+  });
+  selectLabMode(spatialLab?.dataset.labMode || "sense");
+
   const depthPointer = window.matchMedia("(pointer: fine)");
   const enableDepthCards = (root = document) => {
-    const cards = [...root.querySelectorAll(".metrics-bar > div, .focus-card, .silicon-card, .publication-item, .research-method, .service-panel, .collaboration-card")];
+    const cards = [...root.querySelectorAll(".focus-card, .silicon-card, .research-method, .collaboration-card")];
     cards.forEach(card => {
       card.classList.add("vr-depth-card");
       if (card.dataset.vrReady || !depthPointer.matches) return;
@@ -83,8 +136,8 @@
         const bounds = card.getBoundingClientRect();
         const x = (event.clientX - bounds.left) / bounds.width;
         const y = (event.clientY - bounds.top) / bounds.height;
-        card.style.setProperty("--vr-rx", `${((.5 - y) * 4.5).toFixed(2)}deg`);
-        card.style.setProperty("--vr-ry", `${((x - .5) * 5.5).toFixed(2)}deg`);
+        card.style.setProperty("--vr-rx", `${((.5 - y) * 2.4).toFixed(2)}deg`);
+        card.style.setProperty("--vr-ry", `${((x - .5) * 3).toFixed(2)}deg`);
         card.style.setProperty("--vr-light-x", `${(x * 100).toFixed(1)}%`);
         card.style.setProperty("--vr-light-y", `${(y * 100).toFixed(1)}%`);
       }, { passive: true });
