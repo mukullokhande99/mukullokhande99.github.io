@@ -253,20 +253,20 @@
       logoCode: "UNIBO"
     },
     {
-      name: "Gopal Raut",
-      aliases: ["Gopal Raut"],
-      affiliation: "Khalifa University, UAE",
-      affiliationUrl: "https://www.ku.ac.ae/",
-      logoDomain: "ku.ac.ae",
-      logoCode: "KU"
-    },
-    {
       name: "Ratko Pilipović",
       aliases: ["Ratko Pilipović", "Ratko Pilipovic"],
       affiliation: "University of Ljubljana, Slovenia",
       affiliationUrl: "https://fri.uni-lj.si/en/about-faculty/employees/ratko-pilipovic",
       logoDomain: "uni-lj.si",
       logoCode: "UL"
+    },
+    {
+      name: "Gopal Raut",
+      aliases: ["Gopal Raut"],
+      affiliation: "Khalifa University, UAE",
+      affiliationUrl: "https://www.ku.ac.ae/",
+      logoDomain: "ku.ac.ae",
+      logoCode: "KU"
     },
     {
       name: "Narendra S. Dhakad",
@@ -314,16 +314,15 @@
   const renderCollaborations = () => {
     if (!collaborationList) return;
 
-    const rankedCollaborators = collaboratorProfiles.map(profile => {
+    const rankedCollaborators = collaboratorProfiles.map((profile, profileOrder) => {
       const works = publications.filter(publication => profile.aliases.some(alias => publication.authors.includes(alias)))
         .sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
       const publishedCount = works.filter(publication => publication.type !== "advanced").length;
       const advancedCount = works.length - publishedCount;
-      return { ...profile, works, publishedCount, advancedCount };
+      return { ...profile, works, publishedCount, advancedCount, profileOrder };
     }).sort((a, b) =>
       b.works.length - a.works.length ||
-      b.publishedCount - a.publishedCount ||
-      a.name.localeCompare(b.name)
+      a.profileOrder - b.profileOrder
     );
 
     collaborationList.innerHTML = rankedCollaborators.map((profile, index) => {
