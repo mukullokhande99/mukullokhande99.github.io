@@ -51,11 +51,27 @@ def extract_all_time_metrics(payload: dict) -> dict[str, int]:
     return found
 
 
-def fetch_metrics(api_key: str) -> dict[str, int]:
+def extract_articles(payload: dict) -> list[dict]:
+    articles = []
+    for article in payload.get("articles", []):
+        if not isinstance(article, dict) or not article.get("title"):
+            continue
+        cited_by = article.get("cited_by") if isinstance(article.get("cited_by"), dict) else {}
+        articles.append({
+            "title": str(article["title"]).strip(),
+            "citations": int(cited_by.get("value", 0)),
+            "cited_by_url": cited_by.get("link", ""),
+        })
+    articles.sort(key=lambda article: article["title"].casefold())
+    return articles
+
+
+def fetch_scholar_data(api_key: str) -> tuple[dict[str, int], list[dict]]:
     query = urlencode({
         "engine": "google_scholar_author",
         "author_id": PROFILE_ID,
         "hl": "en",
+        "num": 100,
         "api_key": api_key,
     })
     request = Request(
@@ -67,7 +83,7 @@ def fetch_metrics(api_key: str) -> dict[str, int]:
 
     if payload.get("error"):
         raise RuntimeError(f"SerpApi error: {payload['error']}")
-    return extract_all_time_metrics(payload)
+    return extract_all_time_metrics(payload), extract_articles(payload)
 
 
 def main() -> int:
@@ -77,14 +93,17 @@ def main() -> int:
         return 2
 
     current = json.loads(METRICS_PATH.read_text(encoding="utf-8"))
-    refreshed = fetch_metrics(api_key)
-    if all(current.get(key) == value for key, value in refreshed.items()):
+    refreshed, articles = fetch_scholar_data(api_key)
+    metrics_unchanged = all(current.get(key) == value for key, value in refreshed.items())
+    articles_unchanged = current.get("articles") == articles
+    if metrics_unchanged and articles_unchanged:
         print("Google Scholar metrics are unchanged.")
         return 0
 
     output = {
         "profile_id": PROFILE_ID,
         **refreshed,
+        "articles": articles,
         "updated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "source_url": SOURCE_URL,
     }

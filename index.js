@@ -9,6 +9,37 @@
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
   let activeYear = "all";
+  let scholarArticles = [];
+
+  const normalizeTitle = (value = "") => String(value)
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+
+  const titleTokens = value => new Set(normalizeTitle(value)
+    .split(" ")
+    .filter(token => token.length > 2 && !["the", "and", "for", "with", "from"].includes(token)));
+
+  const findScholarArticle = title => {
+    const normalized = normalizeTitle(title);
+    const exact = scholarArticles.find(article => normalizeTitle(article.title) === normalized);
+    if (exact) return exact;
+
+    const expectedTokens = titleTokens(title);
+    let best = null;
+    let bestScore = 0;
+    scholarArticles.forEach(article => {
+      const candidateTokens = titleTokens(article.title);
+      const overlap = [...expectedTokens].filter(token => candidateTokens.has(token)).length;
+      const score = overlap / Math.max(expectedTokens.size, candidateTokens.size, 1);
+      if (score > bestScore) {
+        best = article;
+        bestScore = score;
+      }
+    });
+    return bestScore >= .82 ? best : null;
+  };
 
   const totals = publications.reduce((result, publication) => {
     if (publication.type !== "advanced") result.all += 1;
@@ -50,6 +81,10 @@
       }
       if (!metrics) throw new Error("No Scholar metrics source was available.");
 
+      scholarArticles = Array.isArray(metrics.articles)
+        ? metrics.articles.filter(article => article && typeof article.title === "string" && Number.isInteger(article.citations))
+        : [];
+
       Object.entries(targets).forEach(([key, element]) => {
         const value = metrics[key];
         if (element && Number.isInteger(value) && value >= 0) element.textContent = value.toLocaleString("en-US");
@@ -64,6 +99,7 @@
           timeZone: "UTC"
         }).format(updatedDate);
       }
+      render();
     } catch (error) {
       console.info("Using the last embedded Google Scholar metrics.", error);
     }
@@ -117,13 +153,23 @@
       const journalIndexing = publication.type === "journal" || publication.type === "advanced"
         ? `<div class="pub-indexing"><span>Venue indexing</span><strong>${escapeHTML(publication.indexing || "NR")}</strong></div>`
         : "";
-      const journalMetrics = publication.type === "journal" || publication.type === "advanced"
-        ? `<div class="pub-metrics" aria-label="${publication.type === "advanced" ? "Target venue metrics" : "Journal metrics"}"><span class="pub-metric"><span>Quartile range</span><strong>${escapeHTML(publication.quartile || "NR")}</strong></span><span class="pub-metric"><span>Impact factor</span><strong>${escapeHTML(publication.impactFactor || "NR")}</strong></span></div>`
+      const metricItems = [];
+      if (publication.type === "journal" || publication.type === "advanced") {
+        metricItems.push(`<span class="pub-metric"><span>Quartile range</span><strong>${escapeHTML(publication.quartile || "NR")}</strong></span>`);
+        metricItems.push(`<span class="pub-metric"><span>Impact factor</span><strong>${escapeHTML(publication.impactFactor || "NR")}</strong></span>`);
+      }
+      if (publication.type === "journal" || publication.type === "conference") {
+        const scholarArticle = findScholarArticle(publication.title);
+        const citationCount = scholarArticle ? scholarArticle.citations.toLocaleString("en-US") : "NR";
+        metricItems.push(`<span class="pub-metric pub-citation"><span>Citation count:</span><strong>${escapeHTML(citationCount)}</strong></span>`);
+      }
+      const publicationMetrics = metricItems.length
+        ? `<div class="pub-metrics" aria-label="Publication metrics">${metricItems.join("")}</div>`
         : "";
       const statusClass = publication.status && /accepted/i.test(publication.status) ? " accepted" : "";
       return `<article class="publication-item">
         <div class="pub-meta"><span class="pub-year">${publication.year}</span><span class="pub-type">${typeLabels[publication.type]}</span></div>
-        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status${statusClass}">${escapeHTML(publication.status)}</span>` : ""}${journalIndexing}${journalMetrics}</div>
+        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status${statusClass}">${escapeHTML(publication.status)}</span>` : ""}${journalIndexing}${publicationMetrics}</div>
         ${link}
       </article>`;
     }).join("");

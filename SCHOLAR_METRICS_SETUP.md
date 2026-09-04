@@ -1,6 +1,6 @@
 # Automatic Google Scholar metrics
 
-The homepage reads `data/scholar-metrics.json` from the repository and keeps its embedded values as a fallback. Reading the repository copy directly ensures new metrics appear without waiting for another GitHub Pages build. A GitHub Actions workflow checks the Google Scholar profile every Monday and commits the JSON file only when citations, h-index, or i10-index changes.
+The homepage reads `data/scholar-metrics.json` from the repository and keeps its embedded values as a fallback. Reading the repository copy directly ensures new metrics appear without waiting for another GitHub Pages build. A GitHub Actions workflow checks the Google Scholar profile every Monday and commits the JSON file when citations, h-index, i10-index, or an individual paper's citation count changes.
 
 ## One-time setup
 
