@@ -291,6 +291,9 @@
       if (active) item.link.setAttribute("aria-current", "location");
       else item.link.removeAttribute("aria-current");
     });
+    const activeIndex = Math.max(0, navTargets.indexOf(current));
+    const routeProgress = navTargets.length > 1 ? activeIndex / (navTargets.length - 1) : 0;
+    nav.style.setProperty("--route-progress", routeProgress.toFixed(2));
     navTicking = false;
   };
   const queueActiveNavUpdate = () => {
