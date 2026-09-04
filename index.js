@@ -23,8 +23,18 @@
 
   const findScholarArticle = title => {
     const normalized = normalizeTitle(title);
-    const exact = scholarArticles.find(article => normalizeTitle(article.title) === normalized);
+    const compact = normalized.replaceAll(" ", "");
+    const titleKey = normalizeTitle(title.split(":", 1)[0]);
+    const exact = scholarArticles.find(article => {
+      const candidate = normalizeTitle(article.title);
+      return candidate === normalized || candidate.replaceAll(" ", "") === compact;
+    });
     if (exact) return exact;
+
+    const namedMatch = titleKey.length >= 4
+      ? scholarArticles.find(article => normalizeTitle(article.title.split(":", 1)[0]) === titleKey)
+      : null;
+    if (namedMatch) return namedMatch;
 
     const expectedTokens = titleTokens(title);
     let best = null;
