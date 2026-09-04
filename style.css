@@ -782,6 +782,14 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
   .pub-link { width: 2.5rem; height: 2.5rem; }
 }
 
+@media (max-width: 1280px) and (min-width: 1051px) {
+  .site-header { padding-inline: 18px; gap: 16px; }
+  .site-header nav { gap: 4px; }
+  .site-header nav a { padding-right: 5px; }
+  .header-actions { gap: 8px; }
+  .header-link { display: none; }
+}
+
 @media (max-width: 1050px) {
   .site-header { grid-template-columns: minmax(0,1fr) auto; }
   .site-header nav { background: rgba(7,17,31,.98); border-bottom-color: #293950; }
