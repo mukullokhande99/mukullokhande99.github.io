@@ -231,9 +231,6 @@ body[data-spatial="off"] .spatial-toggle-icon i { background: #63758a; box-shado
 .venue-cloud span { padding: 10px 14px; border: 1px solid rgba(255,255,255,.45); font: 500 .72rem/1 "IBM Plex Mono",monospace; }
 
 .collaborations { max-width: none; padding-left: max(28px, calc((100vw - var(--max))/2)); padding-right: max(28px, calc((100vw - var(--max))/2)); background: #f6f8f9; }
-.collaboration-legend { display: flex; flex-wrap: wrap; gap: 10px 22px; margin: -22px 0 30px; padding: 18px 0; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--line); color: var(--muted); font: 600 .68rem/1.4 "IBM Plex Mono",monospace; letter-spacing: .045em; text-transform: uppercase; }
-.collaboration-legend span { display: inline-flex; align-items: center; gap: 8px; }
-.collaboration-legend span::before { content: ""; width: 5px; height: 5px; background: var(--blue); }
 .collaboration-list { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; align-items: start; }
 .collaboration-card { position: relative; min-width: 0; padding: clamp(24px,3vw,38px); overflow: hidden; border: 1px solid var(--line); background: var(--white); box-shadow: 0 16px 38px rgba(18,36,58,.055); }
 .collaboration-card::after { content: ""; position: absolute; right: -68px; bottom: -68px; width: 136px; height: 136px; border: 1px solid rgba(46,97,255,.14); transform: rotate(45deg); pointer-events: none; }
@@ -665,7 +662,7 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
 .brand-copy small,.eyebrow,.hero-overline,.research-tags li,.home-credentials span,
 .impact-heading p,.impact-heading a,.metrics-bar small,.metrics-bar span,.method-kicker,
 .research-method li>span,.timeline time,.focus-card>span,.project-kicker,.filter-label,
-.filter,.publication-summary,.pub-type,.pub-status,.pub-indexing,.pub-metric,.venue-cloud span,.collaboration-legend,.collaboration-rank span,
+.filter,.publication-summary,.pub-type,.pub-status,.pub-indexing,.pub-metric,.venue-cloud span,.collaboration-rank span,
 .contact-links span,footer p { font-size: max(.75rem,12px); }
 
 .about,.silicon,.publications,.collaborations { container-type: inline-size; }
@@ -834,7 +831,6 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
   .hero-bottom p { white-space: nowrap; }
   .about-photo img { height: 360px; object-position: center 16%; }
   .research-method { padding: 25px; box-shadow: 10px 10px 0 #dfe5e9; }
-  .collaboration-legend { align-items: flex-start; flex-direction: column; }
   .collaboration-card { padding: 23px 20px; }
   .collaboration-header { grid-template-columns: minmax(0,1fr) 54px; gap: 14px; }
   .affiliation-logo { width: 54px; height: 54px; }
