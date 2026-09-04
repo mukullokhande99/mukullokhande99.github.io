@@ -1,6 +1,7 @@
 (() => {
   const publications = window.PUBLICATIONS || [];
   const list = document.querySelector("#publication-list");
+  const collaborationList = document.querySelector("#collaboration-list");
   const search = document.querySelector("#publication-search");
   const count = document.querySelector("#result-count");
   const empty = document.querySelector("#empty-state");
@@ -66,7 +67,7 @@
 
   const depthPointer = window.matchMedia("(pointer: fine)");
   const enableDepthCards = (root = document) => {
-    const cards = [...root.querySelectorAll(".metrics-bar > div, .focus-card, .silicon-card, .publication-item, .research-method, .service-panel")];
+    const cards = [...root.querySelectorAll(".metrics-bar > div, .focus-card, .silicon-card, .publication-item, .research-method, .service-panel, .collaboration-card")];
     cards.forEach(card => {
       card.classList.add("vr-depth-card");
       if (card.dataset.vrReady || !depthPointer.matches) return;
@@ -226,6 +227,129 @@
     return Date.UTC(Number(dateMatch[3]), monthNumbers[dateMatch[1].slice(0, 3).toLowerCase()], Number(dateMatch[2] || 1));
   };
 
+  const collaboratorProfiles = [
+    {
+      name: "Akash Sankhe",
+      aliases: ["Akash Sankhe"],
+      affiliation: "Analog Devices India Pvt. Ltd.",
+      affiliationUrl: "https://www.analog.com/",
+      logoDomain: "analog.com",
+      logoCode: "ADI"
+    },
+    {
+      name: "Adam Teman",
+      aliases: ["Adam Teman"],
+      affiliation: "Bar-Ilan University, Israel",
+      affiliationUrl: "https://www.eng.biu.ac.il/temanad/",
+      logoDomain: "biu.ac.il",
+      logoCode: "BIU"
+    },
+    {
+      name: "Omkar Kokane",
+      aliases: ["Omkar Kokane", "Omkar Rajesh Kokane"],
+      affiliation: "University of Bologna, Italy",
+      affiliationUrl: "https://www.unibo.it/sitoweb/omkar.kokane2/en",
+      logoDomain: "unibo.it",
+      logoCode: "UNIBO"
+    },
+    {
+      name: "Gopal Raut",
+      aliases: ["Gopal Raut"],
+      affiliation: "Khalifa University, UAE",
+      affiliationUrl: "https://www.ku.ac.ae/",
+      logoDomain: "ku.ac.ae",
+      logoCode: "KU"
+    },
+    {
+      name: "Ratko Pilipović",
+      aliases: ["Ratko Pilipović", "Ratko Pilipovic"],
+      affiliation: "University of Ljubljana, Slovenia",
+      affiliationUrl: "https://fri.uni-lj.si/en/about-faculty/employees/ratko-pilipovic",
+      logoDomain: "uni-lj.si",
+      logoCode: "UL"
+    },
+    {
+      name: "Narendra S. Dhakad",
+      aliases: ["Narendra S. Dhakad", "Narendra Singh Dhakad", "Narendra Dhakad"],
+      affiliation: "Intel, Bengaluru",
+      affiliationUrl: "https://www.intel.com/",
+      logoDomain: "intel.com",
+      logoCode: "INTEL"
+    },
+    {
+      name: "Isuru S. Dasanayake",
+      aliases: ["Isuru S. Dasanayake", "Isuru Dasanayake"],
+      affiliation: "University of Peradeniya, Sri Lanka",
+      affiliationUrl: "https://web2.ee.pdn.ac.lk/people/IsuruD",
+      logoDomain: "pdn.ac.lk",
+      logoCode: "UOP"
+    },
+    {
+      name: "Akash Kumar",
+      aliases: ["Akash Kumar"],
+      affiliation: "Ruhr University Bochum, Germany",
+      affiliationUrl: "https://etit.ruhr-uni-bochum.de/en/esys/team/prof-dr-akash-kumar/",
+      logoDomain: "ruhr-uni-bochum.de",
+      logoCode: "RUB"
+    },
+    {
+      name: "Saptarshi Ghosh",
+      aliases: ["Saptarshi Ghosh"],
+      affiliation: "Indian Institute of Technology Indore",
+      affiliationUrl: "https://people.iiti.ac.in/~sghosh/",
+      logoDomain: "iiti.ac.in",
+      logoCode: "IITI"
+    },
+    {
+      name: "Sreenivas Subramoney",
+      aliases: ["Sreenivas Subramoney"],
+      affiliation: "Intel Labs · research mentor",
+      affiliationUrl: "https://www.intel.com/content/www/us/en/research/overview.html",
+      logoDomain: "intel.com",
+      logoCode: "INTEL",
+      archiveNote: "Research collaboration; no shared publication appears in the current archive."
+    }
+  ];
+
+  const renderCollaborations = () => {
+    if (!collaborationList) return;
+
+    const rankedCollaborators = collaboratorProfiles.map(profile => {
+      const works = publications.filter(publication => profile.aliases.some(alias => publication.authors.includes(alias)))
+        .sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
+      const publishedCount = works.filter(publication => publication.type !== "advanced").length;
+      const advancedCount = works.length - publishedCount;
+      return { ...profile, works, publishedCount, advancedCount };
+    }).sort((a, b) =>
+      b.works.length - a.works.length ||
+      b.publishedCount - a.publishedCount ||
+      a.name.localeCompare(b.name)
+    );
+
+    collaborationList.innerHTML = rankedCollaborators.map((profile, index) => {
+      const countParts = [`${profile.publishedCount} published`];
+      if (profile.advancedCount) countParts.push(`${profile.advancedCount} advanced-stage`);
+      const logoUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(profile.logoDomain)}&sz=128`;
+      const publicationItems = profile.works.length
+        ? `<ol class="collaboration-publications">${profile.works.map(publication => {
+            const workTitle = publication.url
+              ? `<a href="${escapeHTML(publication.url)}" target="_blank" rel="noreferrer">${escapeHTML(publication.title)}<span aria-hidden="true">↗</span></a>`
+              : `<span>${escapeHTML(publication.title)}</span>`;
+            return `<li><div>${workTitle}<small>${publication.year} · ${escapeHTML(typeLabels[publication.type])}</small></div></li>`;
+          }).join("")}</ol>`
+        : `<p class="collaboration-empty">${escapeHTML(profile.archiveNote || "No shared publication appears in the current archive.")}</p>`;
+
+      return `<article class="collaboration-card reveal">
+        <div class="collaboration-rank"><strong>${String(index + 1).padStart(2, "0")}</strong><span>${countParts.join(" · ")}</span></div>
+        <header class="collaboration-header">
+          <div><h3>${escapeHTML(profile.name)}</h3><a href="${escapeHTML(profile.affiliationUrl)}" target="_blank" rel="noreferrer">${escapeHTML(profile.affiliation)}<span aria-hidden="true">↗</span></a></div>
+          <a class="affiliation-logo" href="${escapeHTML(profile.affiliationUrl)}" target="_blank" rel="noreferrer" aria-label="Visit ${escapeHTML(profile.affiliation)}"><span>${escapeHTML(profile.logoCode)}</span><img src="${escapeHTML(logoUrl)}" alt="" width="64" height="64" loading="lazy" referrerpolicy="no-referrer"></a>
+        </header>
+        <div class="collaboration-work"><p>Shared work</p>${publicationItems}</div>
+      </article>`;
+    }).join("");
+  };
+
   const render = () => {
     const query = search.value.trim().toLowerCase();
     const matches = publications.filter(publication => {
@@ -357,6 +481,8 @@
     if (window.location.hash) window.setTimeout(() => scrollToHash(), 80);
     updateActiveNav();
   });
+
+  renderCollaborations();
 
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
