@@ -25,6 +25,50 @@
   if (paperTotalElement) paperTotalElement.textContent = paperTotal;
   if (patentTotalElement) patentTotalElement.textContent = patentTotal;
 
+  const updateScholarMetrics = async () => {
+    const metricSources = [
+      "https://raw.githubusercontent.com/mukullokhande99/mukullokhande99.github.io/master/data/scholar-metrics.json",
+      "data/scholar-metrics.json"
+    ];
+    const targets = {
+      citations: document.querySelector("#citation-total"),
+      h_index: document.querySelector("#h-index-total"),
+      i10_index: document.querySelector("#i10-index-total")
+    };
+
+    try {
+      let metrics = null;
+      for (const source of metricSources) {
+        try {
+          const response = await fetch(source, { cache: "no-store" });
+          if (!response.ok) throw new Error(`Scholar metrics request failed: ${response.status}`);
+          metrics = await response.json();
+          break;
+        } catch (sourceError) {
+          console.info(`Could not load Scholar metrics from ${source}.`, sourceError);
+        }
+      }
+      if (!metrics) throw new Error("No Scholar metrics source was available.");
+
+      Object.entries(targets).forEach(([key, element]) => {
+        const value = metrics[key];
+        if (element && Number.isInteger(value) && value >= 0) element.textContent = value.toLocaleString("en-US");
+      });
+
+      const updatedAt = document.querySelector("#scholar-updated-at");
+      const updatedDate = new Date(metrics.updated_at);
+      if (updatedAt && !Number.isNaN(updatedDate.getTime())) {
+        updatedAt.textContent = new Intl.DateTimeFormat("en", {
+          month: "short",
+          year: "numeric",
+          timeZone: "UTC"
+        }).format(updatedDate);
+      }
+    } catch (error) {
+      console.info("Using the last embedded Google Scholar metrics.", error);
+    }
+  };
+
   const updateFilterCounts = () => {
     typeFilters.forEach(button => {
       const type = button.dataset.filter;
@@ -184,6 +228,7 @@
 
   document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
   document.querySelector("#year").textContent = new Date().getFullYear();
+  updateScholarMetrics();
   updateFilterCounts();
   render();
 })();

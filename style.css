@@ -74,7 +74,7 @@ button { color: inherit; }
 .signal-bars i:nth-child(2) { height: 74%; animation-delay: -.3s; }.signal-bars i:nth-child(3){height:48%;animation-delay:-.5s}.signal-bars i:nth-child(4){height:92%;animation-delay:-.8s}.signal-bars i:nth-child(5){height:64%;animation-delay:-.2s}.signal-bars i:nth-child(6){height:40%;animation-delay:-.7s}.signal-bars i:nth-child(7){height:82%;animation-delay:-.4s}
 @keyframes signal { to { height: 95%; } }
 
-.metrics-bar { display: grid; grid-template-columns: minmax(235px,1.35fr) repeat(5,minmax(0,1fr)); gap: 1px; max-width: var(--max); margin: 0 auto; border: 1px solid var(--line); background: var(--line); }
+.metrics-bar { display: grid; grid-template-columns: minmax(235px,1.35fr) repeat(6,minmax(0,1fr)); gap: 1px; max-width: var(--max); margin: 0 auto; border: 1px solid var(--line); background: var(--line); }
 .metrics-bar > div { min-height: 144px; padding: 27px; display: flex; flex-direction: column; justify-content: center; background: var(--white); }
 .metrics-bar .impact-heading { align-items: flex-start; background: var(--ink); color: var(--white); }
 .impact-heading p { margin: 0 0 10px; color: var(--cyan); font: 600 .62rem/1.2 "IBM Plex Mono",monospace; letter-spacing: .11em; text-transform: uppercase; }
@@ -236,7 +236,7 @@ footer p:last-child { justify-self: end; }
   .metrics-bar { grid-template-columns: repeat(2,1fr); margin: 0 18px; }
   .metrics-bar > div { min-height: 126px; padding: 22px; }
   .metrics-bar .impact-heading { min-height: 132px; }
-  .metrics-bar > div:last-child { grid-column: 1/-1; }
+  .metrics-bar > div:last-child { grid-column: auto; }
   .metrics-bar strong { font-size: 1.75rem; }
   .content-section { padding: 82px 22px; }
   .section-heading { margin-bottom: 40px; }
