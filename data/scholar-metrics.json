@@ -3,7 +3,108 @@
   "citations": 158,
   "h_index": 6,
   "i10_index": 5,
-  "articles": [],
-  "updated_at": "2026-09-04T04:38:28Z",
+  "articles": [
+    {
+      "title": "A NOR8T SRAM Digital Compute-in-Memory Macro for Sparse and Scalable Edge-AI Processing",
+      "citations": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16219115234406828143"
+    },
+    {
+      "title": "Area-optimized 2D Interleaved Adder Tree Design for Sparse DCIM Edge Processing",
+      "citations": 11,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=4895385300727195788"
+    },
+    {
+      "title": "Bhasha-Rupantarika: Algorithm-Hardware Co-design approach for Multilingual Neural Machine Translation",
+      "citations": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=11422605027220002110"
+    },
+    {
+      "title": "Bio-rv: Low-power resource-efficient risc-v processor for biomedical applications",
+      "citations": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=2000027724541432098"
+    },
+    {
+      "title": "BRAIN-AD: A Bit-Serial, ReRAM-Empowered Digital Processing-in-Memory Macro for Autonomous Driving",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
+      "title": "E-NERVE: An Edge-Adaptive, NAF-Empowered, Resource-Efficient Versatile AI Inference Engine",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
+      "title": "FERMI-ML: A Flexible and Resource-Efficient Memory-In-Situ SRAM Macro for TinyML Acceleration",
+      "citations": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=15038365319763893469"
+    },
+    {
+      "title": "Flex-PE: Flexible and SIMD multiprecision processing element for AI workloads",
+      "citations": 53,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12966948204058567294"
+    },
+    {
+      "title": "FPGA Based Adaptive Beamforming for RIS using Deep Learning",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
+      "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
+      "citations": 13,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
+    },
+    {
+      "title": "HYDRA: A Resource-Efficient Hybrid Data-Multiplexed, Run-time Layer-Reconfigurable Compute Engine for DNN Acceleration",
+      "citations": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16507201400140370732"
+    },
+    {
+      "title": "LPRE: Logarithmic Posit-enabled Reconfigurable edge-AI Engine",
+      "citations": 27,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=8466834694576328665"
+    },
+    {
+      "title": "RAMAN: Resource-efficient approximate posit processing for algorithm-hardware co-design",
+      "citations": 6,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3501228015545828363"
+    },
+    {
+      "title": "RAPID: Re-Configurable Adder Tree Based Performance-Incentivized AI Digital CIM Macro",
+      "citations": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=10700881031867476828"
+    },
+    {
+      "title": "REFLEX-PIM: A Resource-Efficient and Flexible Trans-Precision Digital Processing-in-Memory SRAM Macro for AI Workloads",
+      "citations": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=9726208681657052733"
+    },
+    {
+      "title": "ReLANCE: A Resource-Efficient Low-Latency Cortical Neural Acceleration Engine",
+      "citations": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1826341444851106079"
+    },
+    {
+      "title": "Retrospective: A CORDIC Based Configurable Activation Function for NN Applications",
+      "citations": 20,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=5665477958927018951"
+    },
+    {
+      "title": "Trans-precision NPU for resource-efficient mobile AI acceleration",
+      "citations": 1,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3563923412327302310"
+    },
+    {
+      "title": "ULTRA-MACE: A Unified Low-bit Trans-precision Reconfigurable Multiply-Accumulate Compute Engine for Accelerated Computing",
+      "citations": 2,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=14802770772856967881"
+    },
+    {
+      "title": "XR-NPE: High-Throughput Mixed-precision SIMD Neural Processing Engine for Extended Reality Perception Workloads",
+      "citations": 5,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
+    }
+  ],
+  "updated_at": "2026-09-04T04:51:06Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
