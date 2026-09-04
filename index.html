@@ -11,13 +11,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260904-12">
+  <link rel="stylesheet" href="style.css?v=20260904-13">
 </head>
 <body data-spatial="on">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header" id="top">
     <a class="brand" href="#top" aria-label="Mukul Lokhande, home"><span class="brand-mark">ML</span><span class="brand-copy"><strong>Mukul Lokhande</strong><small>XR Architect · Edge-AI</small></span></a>
-    <nav class="adas-nav" id="site-nav" aria-label="Section route"><span class="route-progress" aria-hidden="true"></span><a href="#about" data-route="01">Profile</a><a href="#experience" data-route="02">Experience</a><a href="#focus" data-route="03">Research</a><a href="#silicon" data-route="04">Silicon</a><a href="#publications" data-route="05">Publications</a><a href="#collaborations" data-route="06">Network</a><a href="#contact" data-route="07">Contact</a></nav>
+    <nav class="adas-nav" id="site-nav" aria-label="Section route"><span class="route-progress" aria-hidden="true"></span><a href="#about" data-route="01">Profile</a><a href="#experience" data-route="02">Experience</a><a href="#focus" data-route="03">Research</a><a href="#silicon" data-route="04">Silicon</a><a href="#projects" data-route="05">Projects</a><a href="#publications" data-route="06">Publications</a><a href="#collaborations" data-route="07">Network</a><a href="#contact" data-route="08">Contact</a></nav>
     <div class="header-actions">
       <button class="spatial-toggle" type="button" aria-pressed="true" aria-label="Turn off spatial interface">
         <span class="spatial-toggle-icon" aria-hidden="true"><i></i></span>
@@ -142,8 +142,26 @@
       </div>
     </section>
 
+    <section class="projects content-section" id="projects" aria-labelledby="projects-title">
+      <div class="section-heading split reveal"><div><p class="eyebrow">04 · Projects</p><h2 id="projects-title">Interactive architecture labs.</h2></div><p>Open-source modeling tools for exploring accelerator architectures, workloads, precision, performance, and energy tradeoffs.</p></div>
+      <div class="project-lab-grid">
+        <article class="project-lab-card reveal">
+          <div class="project-lab-visual" aria-hidden="true"><span>TPU</span><i></i><i></i><i></i><i></i><b>MXU</b></div>
+          <div class="project-lab-copy"><div class="project-kicker"><span>Roofline modeling</span><span>Interactive explorer</span></div><h3>TPU Roofline Explorer</h3><p>Explore MXU and VXU configurations, model and layer workloads, mixed precision, memory hierarchy, DVFS, PVT corners, pruning, and latency–energy tradeoffs.</p><div class="project-actions"><a class="button primary" href="https://mukullokhande99.github.io/tpu-roofline-explorer/" target="_blank" rel="noreferrer">Open explorer <span aria-hidden="true">↗</span></a><a class="project-source" href="https://github.com/mukullokhande99/tpu-roofline-explorer" target="_blank" rel="noreferrer">Source code ↗</a></div></div>
+        </article>
+        <article class="project-lab-card reveal">
+          <div class="project-lab-visual flex-pe" aria-hidden="true"><span>PE</span><i></i><i></i><i></i><i></i><b>FLEX</b></div>
+          <div class="project-lab-copy"><div class="project-kicker"><span>Flexible compute</span><span>Research assignment</span></div><h3>Flex-PE Research Explorer</h3><p>Investigate flexible processing-element organizations and compare architectural mappings across precision, workload, utilization, and efficiency constraints.</p><div class="project-actions"><a class="button primary" href="https://mukullokhande99.github.io/tpu-roofline-explorer/assignment-2/" target="_blank" rel="noreferrer">Open explorer <span aria-hidden="true">↗</span></a><a class="project-source" href="https://github.com/mukullokhande99/tpu-roofline-explorer" target="_blank" rel="noreferrer">Source code ↗</a></div></div>
+        </article>
+        <article class="project-lab-card reveal">
+          <div class="project-lab-visual gpu" aria-hidden="true"><span>GPU</span><i></i><i></i><i></i><i></i><b>SM</b></div>
+          <div class="project-lab-copy"><div class="project-kicker"><span>GPU architecture</span><span>Roofline explorer</span></div><h3>NVIDIA GPU Roofline Explorer</h3><p>Model GPU workloads against compute, memory, and execution ceilings to study bottlenecks and architecture-level performance sensitivity.</p><div class="project-actions"><a class="button primary" href="https://mukullokhande99.github.io/tpu-roofline-explorer/assignment-3/" target="_blank" rel="noreferrer">Open explorer <span aria-hidden="true">↗</span></a><a class="project-source" href="https://github.com/mukullokhande99/tpu-roofline-explorer" target="_blank" rel="noreferrer">Source code ↗</a></div></div>
+        </article>
+      </div>
+    </section>
+
     <section class="publications content-section" id="publications" aria-labelledby="publications-title">
-      <div class="section-heading split reveal"><div><p class="eyebrow">04 · Publications</p><h2 id="publications-title">Research archive.</h2></div><p>Journals, conference papers, works in advanced revision, and patents—organised for quick scanning.</p></div>
+      <div class="section-heading split reveal"><div><p class="eyebrow">05 · Publications</p><h2 id="publications-title">Research archive.</h2></div><p>Journals, conference papers, works in advanced revision, and patents—organised for quick scanning.</p></div>
       <div class="publication-tools reveal">
         <label class="search-box"><span class="sr-only">Search publications</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="publication-search" type="search" placeholder="Search title, author, venue…" autocomplete="off"></label>
         <div class="filter-stack">
@@ -156,7 +174,7 @@
 
     <section class="collaborations content-section" id="collaborations" aria-labelledby="collaborations-title">
       <div class="section-heading reveal">
-        <div><p class="eyebrow">05 · Collaborations</p><h2 id="collaborations-title">Built across institutions.</h2></div>
+        <div><p class="eyebrow">06 · Collaborations</p><h2 id="collaborations-title">Built across institutions.</h2></div>
       </div>
       <div class="collaboration-list" id="collaboration-list" aria-live="polite"></div>
     </section>

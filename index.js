@@ -120,7 +120,7 @@
 
   const depthPointer = window.matchMedia("(pointer: fine)");
   const enableDepthCards = (root = document) => {
-    const cards = [...root.querySelectorAll(".focus-card, .silicon-card, .research-method, .collaboration-card")];
+    const cards = [...root.querySelectorAll(".focus-card, .silicon-card, .project-lab-card, .research-method, .collaboration-card")];
     cards.forEach(card => {
       card.classList.add("vr-depth-card");
       if (card.dataset.vrReady || !depthPointer.matches) return;
