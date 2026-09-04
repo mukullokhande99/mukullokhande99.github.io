@@ -567,6 +567,50 @@ body[data-spatial="off"] .spatial-axis,
 body[data-spatial="off"] .home-hero::after { opacity: 0; }
 body[data-spatial="off"] .profile-panel { transform: none; box-shadow: 0 20px 55px rgba(0,0,0,.18); }
 
+/* Pointer-aware VR depth. These transforms never participate in document
+   layout, so cards still reflow normally at browser zoom and on mobile. */
+.vr-depth-card {
+  --vr-rx: 0deg;
+  --vr-ry: 0deg;
+  --vr-rise: 0px;
+  --vr-z: 0px;
+  --vr-light-x: 50%;
+  --vr-light-y: 45%;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+body[data-spatial="on"] .vr-depth-card:not(.reveal),
+body[data-spatial="on"] .vr-depth-card.reveal.visible {
+  transform: perspective(1050px) translate3d(0,var(--vr-rise),var(--vr-z)) rotateX(var(--vr-rx)) rotateY(var(--vr-ry));
+  transition: transform .18s ease-out,box-shadow .28s ease,border-color .28s ease,background-color .28s ease;
+}
+body[data-spatial="on"] .vr-depth-card:is(:hover,:focus-within) {
+  --vr-rise: -7px;
+  --vr-z: 12px;
+  z-index: 2;
+  border-color: rgba(39,216,230,.58);
+  box-shadow: 0 20px 45px rgba(7,17,31,.15),0 0 0 1px rgba(39,216,230,.08);
+}
+body[data-spatial="on"] .metrics-bar>.vr-depth-card:is(:hover,:focus-within) { box-shadow: 0 18px 34px rgba(31,73,124,.16),inset 0 1px rgba(255,255,255,.55); }
+body[data-spatial="on"] .focus-card:is(:hover,:focus-within) { background-image: radial-gradient(circle at var(--vr-light-x) var(--vr-light-y),rgba(39,216,230,.13),transparent 46%); }
+body[data-spatial="on"] .publication-item.vr-depth-card:is(:hover,:focus-within) { padding-left: 12px; padding-right: 12px; background: radial-gradient(circle at var(--vr-light-x) var(--vr-light-y),rgba(255,255,255,.92),rgba(255,255,255,.58) 46%,rgba(255,255,255,.35)); }
+
+body[data-spatial="on"] .metrics-bar>.vr-depth-card>* { transform: translateZ(14px); }
+body[data-spatial="on"] .focus-card.vr-depth-card>span,
+body[data-spatial="on"] .focus-card.vr-depth-card>h3,
+body[data-spatial="on"] .focus-card.vr-depth-card>p { transform: translateZ(16px); }
+body[data-spatial="on"] .silicon-card.vr-depth-card>.silicon-image { transform: translateZ(8px); }
+body[data-spatial="on"] .silicon-card.vr-depth-card>.silicon-copy { transform: translateZ(15px); }
+body[data-spatial="on"] .publication-item.vr-depth-card>.pub-meta,
+body[data-spatial="on"] .publication-item.vr-depth-card>.pub-main,
+body[data-spatial="on"] .publication-item.vr-depth-card>.pub-link { transform: translateZ(10px); }
+body[data-spatial="on"] .research-method.vr-depth-card>*,
+body[data-spatial="on"] .service-panel.vr-depth-card>* { transform: translateZ(14px); }
+.vr-depth-card>* { transition: transform .2s ease-out; }
+
+body[data-spatial="off"] .vr-depth-card,
+body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
+
 /* Readability floors for metadata that remains useful at browser zoom. */
 .brand-copy small,.eyebrow,.hero-overline,.research-tags li,.home-credentials span,
 .impact-heading p,.impact-heading a,.metrics-bar small,.metrics-bar span,.method-kicker,
@@ -682,6 +726,7 @@ body[data-spatial="off"] .profile-panel { transform: none; box-shadow: 0 20px 55
   .hero-bottom p { white-space: nowrap; }
   .about-photo img { height: 360px; object-position: center 16%; }
   .research-method { padding: 25px; box-shadow: 10px 10px 0 #dfe5e9; }
+  .vr-depth-card,.vr-depth-card>* { transform: none!important; }
 }
 
 @media (max-width: 430px) {
@@ -691,5 +736,5 @@ body[data-spatial="off"] .profile-panel { transform: none; box-shadow: 0 20px 55
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .profile-panel,.spatial-orbit { transform: none!important; }
+  .profile-panel,.spatial-orbit,.vr-depth-card,.vr-depth-card>* { transform: none!important; }
 }

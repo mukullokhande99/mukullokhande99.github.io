@@ -55,14 +55,42 @@
       const bounds = spatialStage.getBoundingClientRect();
       const x = (event.clientX - bounds.left) / bounds.width - .5;
       const y = (event.clientY - bounds.top) / bounds.height - .5;
-      spatialStage.style.setProperty("--look-x", `${(x * 7).toFixed(2)}px`);
-      spatialStage.style.setProperty("--look-y", `${(y * 5).toFixed(2)}px`);
-      spatialStage.style.setProperty("--tilt-x", `${(x * 1.15).toFixed(2)}deg`);
-      spatialStage.style.setProperty("--tilt-y", `${(y * -.9).toFixed(2)}deg`);
+      spatialStage.style.setProperty("--look-x", `${(x * 10).toFixed(2)}px`);
+      spatialStage.style.setProperty("--look-y", `${(y * 8).toFixed(2)}px`);
+      spatialStage.style.setProperty("--tilt-x", `${(x * 3.2).toFixed(2)}deg`);
+      spatialStage.style.setProperty("--tilt-y", `${(y * -2.6).toFixed(2)}deg`);
     }, { passive: true });
     spatialStage.addEventListener("pointerleave", resetSpatialPosition);
     reducedMotion.addEventListener?.("change", resetSpatialPosition);
   }
+
+  const depthPointer = window.matchMedia("(pointer: fine)");
+  const enableDepthCards = (root = document) => {
+    const cards = [...root.querySelectorAll(".metrics-bar > div, .focus-card, .silicon-card, .publication-item, .research-method, .service-panel")];
+    cards.forEach(card => {
+      card.classList.add("vr-depth-card");
+      if (card.dataset.vrReady || !depthPointer.matches) return;
+      card.dataset.vrReady = "true";
+      const reset = () => {
+        card.style.setProperty("--vr-rx", "0deg");
+        card.style.setProperty("--vr-ry", "0deg");
+        card.style.setProperty("--vr-light-x", "50%");
+        card.style.setProperty("--vr-light-y", "45%");
+      };
+      card.addEventListener("pointermove", event => {
+        if (document.body.dataset.spatial !== "on" || reducedMotion.matches) return;
+        const bounds = card.getBoundingClientRect();
+        const x = (event.clientX - bounds.left) / bounds.width;
+        const y = (event.clientY - bounds.top) / bounds.height;
+        card.style.setProperty("--vr-rx", `${((.5 - y) * 4.5).toFixed(2)}deg`);
+        card.style.setProperty("--vr-ry", `${((x - .5) * 5.5).toFixed(2)}deg`);
+        card.style.setProperty("--vr-light-x", `${(x * 100).toFixed(1)}%`);
+        card.style.setProperty("--vr-light-y", `${(y * 100).toFixed(1)}%`);
+      }, { passive: true });
+      card.addEventListener("pointerleave", reset);
+      reducedMotion.addEventListener?.("change", reset);
+    });
+  };
 
   const normalizeTitle = (value = "") => String(value)
     .normalize("NFKD")
@@ -236,6 +264,7 @@
         ${link}
       </article>`;
     }).join("");
+    enableDepthCards(list);
   };
 
   typeFilters.forEach(button => button.addEventListener("click", () => {
@@ -340,6 +369,7 @@
 
   document.querySelectorAll(".reveal").forEach(element => revealObserver.observe(element));
   document.querySelector("#year").textContent = new Date().getFullYear();
+  enableDepthCards();
   updateScholarMetrics();
   updateFilterCounts();
   render();
