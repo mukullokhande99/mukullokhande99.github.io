@@ -338,6 +338,31 @@
         ${sharedWork ? `<div class="collaboration-work"><p>Shared work</p>${sharedWork}</div>` : ""}
       </article>`;
     }).join("");
+
+    const updateCollaborationLayout = () => {
+      const styles = window.getComputedStyle(collaborationList);
+      const rowHeight = Number.parseFloat(styles.gridAutoRows);
+      const rowGap = Number.parseFloat(styles.rowGap) || 0;
+      const cards = collaborationList.querySelectorAll(".collaboration-card");
+
+      if (!Number.isFinite(rowHeight)) {
+        cards.forEach(card => { card.style.gridRowEnd = "auto"; });
+        return;
+      }
+
+      cards.forEach(card => {
+        const span = Math.ceil((card.getBoundingClientRect().height + rowGap) / (rowHeight + rowGap));
+        card.style.gridRowEnd = `span ${span}`;
+      });
+    };
+
+    window.requestAnimationFrame(updateCollaborationLayout);
+    if ("ResizeObserver" in window) {
+      const layoutObserver = new ResizeObserver(() => window.requestAnimationFrame(updateCollaborationLayout));
+      collaborationList.querySelectorAll(".collaboration-card").forEach(card => layoutObserver.observe(card));
+    } else {
+      window.addEventListener("resize", updateCollaborationLayout);
+    }
   };
 
   const render = () => {
