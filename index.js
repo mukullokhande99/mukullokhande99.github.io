@@ -120,7 +120,7 @@
 
   const depthPointer = window.matchMedia("(pointer: fine)");
   const enableDepthCards = (root = document) => {
-    const cards = [...root.querySelectorAll(".focus-card, .silicon-card, .project-lab-card, .research-method, .collaboration-card")];
+    const cards = [...root.querySelectorAll(".focus-card, .silicon-card, .research-method, .collaboration-card")];
     cards.forEach(card => {
       card.classList.add("vr-depth-card");
       if (card.dataset.vrReady || !depthPointer.matches) return;
@@ -454,10 +454,13 @@
       const publicationMetrics = metricItems.length
         ? `<div class="pub-metrics" aria-label="Publication metrics">${metricItems.join("")}</div>`
         : "";
+      const recording = publication.recordingUrl
+        ? `<a class="pub-recording" href="${escapeHTML(publication.recordingUrl)}" target="_blank" rel="noreferrer"><span aria-hidden="true">▶</span> Recordings <i aria-hidden="true">↗</i></a>`
+        : "";
       const statusClass = publication.status && /accepted/i.test(publication.status) ? " accepted" : "";
       return `<article class="publication-item">
         <div class="pub-meta"><span class="pub-year">${publication.year}</span><span class="pub-type">${typeLabels[publication.type]}</span></div>
-        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status${statusClass}">${escapeHTML(publication.status)}</span>` : ""}${journalIndexing}${publicationMetrics}</div>
+        <div class="pub-main"><h3>${escapeHTML(publication.title)}</h3><p>${escapeHTML(publication.authors)}</p><p class="venue">${escapeHTML(publication.venue)}</p>${publication.status ? `<span class="pub-status${statusClass}">${escapeHTML(publication.status)}</span>` : ""}${recording}${journalIndexing}${publicationMetrics}</div>
         ${link}
       </article>`;
     }).join("");
