@@ -682,6 +682,52 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
   .hero-bottom { min-height: 78px; }
 }
 
+/* At heavy browser zoom-out the CSS viewport becomes several thousand pixels
+   wide. A fixed maximum width made the whole portfolio look like a miniature
+   page. This proportional tier keeps its physical footprint and readability. */
+@media (min-width: 3200px) {
+  :root {
+    --max: 88vw;
+    --header: clamp(128px,4vw,240px);
+  }
+  html { font-size: clamp(24px,.72vw,46px); }
+  .site-header { padding-inline: 6vw; gap: clamp(1rem,2.2vw,3rem); }
+  .brand-mark { width: 2.45rem; height: 2.45rem; }
+  .site-header nav { gap: clamp(.35rem,.7vw,1rem); }
+  .site-header nav a { min-height: 2.5rem; grid-template-columns: 1.65rem auto; gap: .45rem; padding: .3rem .55rem .3rem .3rem; }
+  .site-header nav a::before { width: 1.65rem; height: 1.65rem; }
+  .site-header nav a::after { left: .8rem; }
+  .spatial-toggle { min-height: 2.45rem; padding: .35rem .65rem; }
+  .spatial-toggle-icon { width: 1.45rem; height: 1.45rem; }
+  .home-hero { padding-inline: 6vw; }
+  .hero-stage { min-height: calc(100vh - 9rem); grid-template-columns: minmax(0,1.05fr) minmax(32rem,.95fr); gap: clamp(4rem,6vw,10rem); }
+  .home-intro { padding-block: 5rem; }
+  .home-visual { min-height: min(47rem,calc(100vh - 11rem)); }
+  .profile-panel { width: min(88%,38rem); height: min(43rem,66vh); }
+  .hero-bottom { min-height: 4.8rem; }
+  .metrics-bar { grid-template-columns: minmax(16rem,1.35fr) repeat(6,minmax(0,1fr)); }
+  .metrics-bar>div { min-height: 8.5rem; padding: 1.7rem; }
+  .content-section { padding-block: clamp(7rem,4vw,12rem); padding-inline: 2rem; }
+  .section-heading { max-width: 55rem; margin-bottom: 4rem; }
+  .section-heading.split { max-width: none; grid-template-columns: 1fr minmax(25rem,34rem); gap: 4rem; }
+  .about-layout { grid-template-columns: minmax(24rem,.72fr) minmax(0,1.28fr); }
+  .research-method { padding: 2rem; }
+  .focus { padding-inline: 6vw; }
+  .focus-card { min-height: 20rem; padding: 2rem; }
+  .silicon-list { gap: 1.5rem; }
+  .silicon-card { min-height: 24rem; grid-template-columns: minmax(15rem,.76fr) 1.24fr; }
+  .silicon-card.featured { grid-template-columns: 1.1fr .9fr; }
+  .silicon-image { padding: 1.5rem; }
+  .silicon-image img { max-height: 29rem; }
+  .publications,.service { padding-inline: 6vw; }
+  .publication-tools { gap: 2rem; padding-block: 1.5rem; }
+  .search-box { width: min(100%,26rem); }
+  .search-box input { height: 3rem; }
+  .filter { min-height: 2.5rem; padding-inline: .9rem; }
+  .publication-item { grid-template-columns: 8rem 1fr 3rem; gap: 2rem; padding-block: 1.9rem; }
+  .pub-link { width: 2.5rem; height: 2.5rem; }
+}
+
 @media (max-width: 1050px) {
   .site-header { grid-template-columns: minmax(0,1fr) auto; }
   .site-header nav { background: rgba(7,17,31,.98); border-bottom-color: #293950; }
