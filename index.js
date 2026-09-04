@@ -170,7 +170,7 @@
       }
       if (publication.type === "journal" || publication.type === "conference") {
         const scholarArticle = findScholarArticle(publication.title);
-        const citationCount = scholarArticle ? scholarArticle.citations.toLocaleString("en-US") : "NR";
+        const citationCount = scholarArticle ? scholarArticle.citations.toLocaleString("en-US") : "0";
         metricItems.push(`<span class="pub-metric pub-citation"><span>Citation count:</span><strong>${escapeHTML(citationCount)}</strong></span>`);
       }
       const publicationMetrics = metricItems.length
