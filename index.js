@@ -299,15 +299,6 @@
       affiliationUrl: "https://people.iiti.ac.in/~sghosh/",
       logoDomain: "iiti.ac.in",
       logoCode: "IITI"
-    },
-    {
-      name: "Sreenivas Subramoney",
-      aliases: ["Sreenivas Subramoney"],
-      affiliation: "Intel Labs · research mentor",
-      affiliationUrl: "https://www.intel.com/content/www/us/en/research/overview.html",
-      logoDomain: "intel.com",
-      logoCode: "INTEL",
-      archiveNote: "Research collaboration; no shared publication appears in the current archive."
     }
   ];
 
@@ -329,14 +320,14 @@
       const countParts = [`${profile.publishedCount} published`];
       if (profile.advancedCount) countParts.push(`${profile.advancedCount} advanced-stage`);
       const logoUrl = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(profile.logoDomain)}&sz=128`;
-      const publicationItems = profile.works.length
+      const sharedWork = profile.works.length > 1
         ? `<ol class="collaboration-publications">${profile.works.map(publication => {
             const workTitle = publication.url
               ? `<a href="${escapeHTML(publication.url)}" target="_blank" rel="noreferrer">${escapeHTML(publication.title)}<span aria-hidden="true">↗</span></a>`
               : `<span>${escapeHTML(publication.title)}</span>`;
             return `<li><div>${workTitle}<small>${publication.year} · ${escapeHTML(typeLabels[publication.type])}</small></div></li>`;
           }).join("")}</ol>`
-        : `<p class="collaboration-empty">${escapeHTML(profile.archiveNote || "No shared publication appears in the current archive.")}</p>`;
+        : "";
 
       return `<article class="collaboration-card reveal">
         <div class="collaboration-rank"><strong>${String(index + 1).padStart(2, "0")}</strong><span>${countParts.join(" · ")}</span></div>
@@ -344,7 +335,7 @@
           <div><h3>${escapeHTML(profile.name)}</h3><a href="${escapeHTML(profile.affiliationUrl)}" target="_blank" rel="noreferrer">${escapeHTML(profile.affiliation)}<span aria-hidden="true">↗</span></a></div>
           <a class="affiliation-logo" href="${escapeHTML(profile.affiliationUrl)}" target="_blank" rel="noreferrer" aria-label="Visit ${escapeHTML(profile.affiliation)}"><span>${escapeHTML(profile.logoCode)}</span><img src="${escapeHTML(logoUrl)}" alt="" width="64" height="64" loading="lazy" referrerpolicy="no-referrer"></a>
         </header>
-        <div class="collaboration-work"><p>Shared work</p>${publicationItems}</div>
+        ${sharedWork ? `<div class="collaboration-work"><p>Shared work</p>${sharedWork}</div>` : ""}
       </article>`;
     }).join("");
   };
