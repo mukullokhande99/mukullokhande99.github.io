@@ -197,8 +197,6 @@ body[data-spatial="off"] .spatial-toggle-icon i { background: #63758a; box-shado
 .project-lab-copy>p { margin: 0; color: var(--muted); font-size: .94rem; }
 .project-actions { margin-top: auto; padding-top: 28px; display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
 .project-actions .button { min-height: 42px; padding-inline: 17px; gap: 12px; font-size: .78rem; }
-.project-source { color: var(--blue); font: 600 .72rem/1.4 "IBM Plex Mono",monospace; border-bottom: 1px solid transparent; }
-.project-source:hover,.project-source:focus-visible { border-color: currentColor; }
 .stat-list { list-style: none; display: grid; grid-template-columns: repeat(3,1fr); gap: 0; margin: 25px 0 0; padding: 20px 0 0; border-top: 1px solid var(--line); }
 .stat-list li { padding: 0 12px; color: var(--muted); font-size: .72rem; line-height: 1.35; border-right: 1px solid var(--line); }
 .stat-list li:first-child { padding-left: 0; }.stat-list li:last-child{border:0}
@@ -990,7 +988,6 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
   .project-lab-copy { padding: 25px 20px; }
   .project-actions { align-items: stretch; flex-direction: column; gap: 14px; }
   .project-actions .button { width: 100%; }
-  .project-source { align-self: center; }
   .vr-depth-card,.vr-depth-card>* { transform: none!important; }
 }
 
