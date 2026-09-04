@@ -284,6 +284,7 @@
     {
       name: "Akash Sankhe",
       aliases: ["Akash Sankhe"],
+      rankPriority: 2,
       affiliation: "Analog Devices India Pvt. Ltd.",
       affiliationUrl: "https://www.analog.com/",
       logoDomain: "analog.com",
@@ -301,6 +302,7 @@
     {
       name: "Omkar Kokane",
       aliases: ["Omkar Kokane", "Omkar Rajesh Kokane"],
+      rankPriority: 3,
       affiliation: "University of Bologna, Italy",
       affiliationUrl: "https://www.unibo.it/sitoweb/omkar.kokane2/en",
       logoDomain: "unibo.it",
@@ -318,6 +320,7 @@
     {
       name: "Gopal Raut",
       aliases: ["Gopal Raut"],
+      rankPriority: 4,
       affiliation: "Khalifa University, UAE",
       affiliationUrl: "https://www.ku.ac.ae/",
       logoDomain: "ku.ac.ae",
@@ -326,6 +329,7 @@
     {
       name: "Narendra S. Dhakad",
       aliases: ["Narendra S. Dhakad", "Narendra Singh Dhakad", "Narendra Dhakad"],
+      rankPriority: 7,
       affiliation: "Intel, Bengaluru",
       affiliationUrl: "https://www.intel.com/",
       logoDomain: "intel.com",
@@ -334,6 +338,7 @@
     {
       name: "Isuru S. Dasanayake",
       aliases: ["Isuru S. Dasanayake", "Isuru Dasanayake"],
+      rankPriority: 8,
       affiliation: "University of Peradeniya, Sri Lanka",
       affiliationUrl: "https://web2.ee.pdn.ac.lk/people/IsuruD",
       logoDomain: "pdn.ac.lk",
@@ -342,6 +347,7 @@
     {
       name: "Akash Kumar",
       aliases: ["Akash Kumar"],
+      rankPriority: 5,
       affiliation: "Ruhr University Bochum, Germany",
       affiliationUrl: "https://etit.ruhr-uni-bochum.de/en/esys/team/prof-dr-akash-kumar/",
       logoDomain: "ruhr-uni-bochum.de",
@@ -350,6 +356,7 @@
     {
       name: "Saptarshi Ghosh",
       aliases: ["Saptarshi Ghosh"],
+      rankPriority: 6,
       affiliation: "Indian Institute of Technology Indore",
       affiliationUrl: "https://people.iiti.ac.in/~sghosh/",
       logoDomain: "iiti.ac.in",
