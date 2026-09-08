@@ -282,7 +282,7 @@
 
   const collaboratorProfiles = [
     {
-      name: "Akash Sankhe",
+      name: "Mr. Akash Sankhe",
       aliases: ["Akash Sankhe"],
       rankPriority: 2,
       affiliation: "Analog Devices India Pvt. Ltd.",
@@ -291,7 +291,7 @@
       logoCode: "ADI"
     },
     {
-      name: "Adam Teman",
+      name: "Prof. Adam Teman",
       aliases: ["Adam Teman"],
       rankPriority: 0,
       affiliation: "Bar-Ilan University, Israel",
@@ -300,7 +300,7 @@
       logoCode: "BIU"
     },
     {
-      name: "Omkar Kokane",
+      name: "Mr. Omkar Kokane",
       aliases: ["Omkar Kokane", "Omkar Rajesh Kokane"],
       rankPriority: 3,
       affiliation: "University of Bologna, Italy",
@@ -309,7 +309,7 @@
       logoCode: "UNIBO"
     },
     {
-      name: "Ratko Pilipović",
+      name: "Dr. Ratko Pilipović",
       aliases: ["Ratko Pilipović", "Ratko Pilipovic"],
       rankPriority: 1,
       affiliation: "University of Ljubljana, Slovenia",
@@ -318,7 +318,7 @@
       logoCode: "UL"
     },
     {
-      name: "Narendra S. Dhakad",
+      name: "Dr. Narendra S. Dhakad",
       aliases: ["Narendra S. Dhakad", "Narendra Singh Dhakad", "Narendra Dhakad"],
       rankPriority: 7,
       affiliation: "Intel, Bengaluru",
@@ -327,7 +327,7 @@
       logoCode: "INTEL"
     },
     {
-      name: "Isuru S. Dasanayake",
+      name: "Dr. Isuru S. Dasanayake",
       aliases: ["Isuru S. Dasanayake", "Isuru Dasanayake"],
       rankPriority: 8,
       affiliation: "University of Peradeniya, Sri Lanka",
@@ -336,7 +336,7 @@
       logoCode: "UOP"
     },
     {
-      name: "Akash Kumar",
+      name: "Prof. Akash Kumar",
       aliases: ["Akash Kumar"],
       rankPriority: 5,
       affiliation: "Ruhr University Bochum, Germany",
@@ -345,7 +345,7 @@
       logoCode: "RUB"
     },
     {
-      name: "Saptarshi Ghosh",
+      name: "Dr. Saptarshi Ghosh",
       aliases: ["Saptarshi Ghosh"],
       rankPriority: 6,
       affiliation: "Indian Institute of Technology Indore",
