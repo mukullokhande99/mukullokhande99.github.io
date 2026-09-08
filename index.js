@@ -318,15 +318,6 @@
       logoCode: "UL"
     },
     {
-      name: "Gopal Raut",
-      aliases: ["Gopal Raut"],
-      rankPriority: 4,
-      affiliation: "Khalifa University, UAE",
-      affiliationUrl: "https://www.ku.ac.ae/",
-      logoDomain: "ku.ac.ae",
-      logoCode: "KU"
-    },
-    {
       name: "Narendra S. Dhakad",
       aliases: ["Narendra S. Dhakad", "Narendra Singh Dhakad", "Narendra Dhakad"],
       rankPriority: 7,
