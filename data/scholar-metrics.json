@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 158,
+  "citations": 159,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -51,7 +51,7 @@
     },
     {
       "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
-      "citations": 13,
+      "citations": 14,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
     },
     {
@@ -95,6 +95,11 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3563923412327302310"
     },
     {
+      "title": "TREA: Low-Precision Time-Multiplexed, Resource-Efficient Edge Accelerator for Object Detection and Classification",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
       "title": "ULTRA-MACE: A Unified Low-bit Trans-precision Reconfigurable Multiply-Accumulate Compute Engine for Accelerated Computing",
       "citations": 2,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=14802770772856967881"
@@ -105,6 +110,6 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-09-04T04:51:06Z",
+  "updated_at": "2026-09-21T09:02:05Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
