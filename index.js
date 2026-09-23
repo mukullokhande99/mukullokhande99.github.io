@@ -187,7 +187,7 @@
   };
 
   const totals = publications.reduce((result, publication) => {
-    if (publication.type !== "advanced") result.all += 1;
+    result.all += 1;
     result[publication.type] = (result[publication.type] || 0) + 1;
     return result;
   }, { all: 0 });
@@ -254,7 +254,7 @@
     typeFilters.forEach(button => {
       const type = button.dataset.filter;
       const total = publications.filter(publication =>
-        (type === "all" ? publication.type !== "advanced" : publication.type === type) &&
+        (type === "all" ? true : publication.type === type) &&
         (activeYear === "all" || publication.year === Number(activeYear))
       ).length;
       button.querySelector("span").textContent = total;
@@ -263,7 +263,7 @@
       const year = button.dataset.year;
       const total = publications.filter(publication =>
         (year === "all" || publication.year === Number(year)) &&
-        (activeFilter === "all" ? publication.type !== "advanced" : publication.type === activeFilter)
+        (activeFilter === "all" ? true : publication.type === activeFilter)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -424,7 +424,7 @@
   const render = () => {
     const query = search.value.trim().toLowerCase();
     const matches = publications.filter(publication => {
-      const isType = activeFilter === "all" ? publication.type !== "advanced" : publication.type === activeFilter;
+      const isType = activeFilter === "all" ? true : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
       return isType && isYear && haystack.includes(query);
