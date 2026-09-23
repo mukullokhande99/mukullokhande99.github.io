@@ -201,6 +201,22 @@
   if (paperTotalElement) paperTotalElement.textContent = paperTotal;
   if (patentTotalElement) patentTotalElement.textContent = patentTotal;
 
+  const updateVisitorCount = async () => {
+    const visitorCount = document.querySelector("#visitor-count");
+    if (!visitorCount) return;
+    try {
+      const response = await fetch("https://countapi.mileshilliard.com/api/v1/hit/mukullokhande99-github-io", { cache: "no-store" });
+      if (!response.ok) throw new Error(`Visitor counter request failed: ${response.status}`);
+      const data = await response.json();
+      const value = Number(data.value ?? data.count);
+      if (Number.isFinite(value) && value >= 0) visitorCount.textContent = Math.trunc(value).toLocaleString("en-US");
+      else throw new Error("Visitor counter returned an invalid value.");
+    } catch (error) {
+      visitorCount.textContent = "—";
+      console.info("Visitor counter is temporarily unavailable.", error);
+    }
+  };
+
   const updateScholarMetrics = async () => {
     const metricSources = [
       "https://raw.githubusercontent.com/mukullokhande99/mukullokhande99.github.io/master/data/scholar-metrics.json",
@@ -571,6 +587,7 @@
   document.querySelector("#year").textContent = new Date().getFullYear();
   enableDepthCards();
   updateScholarMetrics();
+  updateVisitorCount();
   updateFilterCounts();
   render();
 })();
