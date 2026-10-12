@@ -1,5 +1,6 @@
 (() => {
-  const publications = window.PUBLICATIONS || [];
+  const publications = window.PublicationRules.normalizePublications(window.PUBLICATIONS || []);
+  window.PUBLICATIONS = publications;
   const list = document.querySelector("#publication-list");
   const collaborationList = document.querySelector("#collaboration-list");
   const search = document.querySelector("#publication-search");

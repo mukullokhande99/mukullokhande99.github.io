@@ -1,0 +1,78 @@
+name: Check and correct publications
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - "publications.js"
+      - "publication-rules.js"
+      - "index.js"
+      - "index.html"
+      - "scripts/check-publications.cjs"
+      - "tests/publication-rules.test.cjs"
+      - ".github/workflows/check-publications.yml"
+  pull_request:
+    paths:
+      - "publications.js"
+      - "publication-rules.js"
+      - "index.js"
+      - "index.html"
+      - "scripts/check-publications.cjs"
+      - "tests/publication-rules.test.cjs"
+      - ".github/workflows/check-publications.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publication-check-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: node --test tests/publication-rules.test.cjs
+      - run: node scripts/check-publications.cjs
+
+  correct:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: master
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: node --test tests/publication-rules.test.cjs
+      - run: node scripts/check-publications.cjs --write
+      - run: node scripts/check-publications.cjs
+      - name: Commit corrections and rebuild Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          if git diff --quiet -- publications.js index.html; then
+            echo "Publication data and counts are already consistent."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add publications.js index.html
+          git commit -m "Automatically normalize publications and refresh counts"
+          git push origin HEAD:master
+          gh api --method POST "repos/$REPOSITORY/pages/builds"

@@ -1,0 +1,74 @@
+(function (root, factory) {
+  const rules = factory();
+  if (typeof module === "object" && module.exports) module.exports = rules;
+  else root.PublicationRules = rules;
+})(typeof globalThis === "object" ? globalThis : this, function () {
+  "use strict";
+
+  // Add only verified aliases here; unrelated authors retain their names.
+  const authorGroups = [
+    ["Mohd Faisal Khan", "Mohd F. Khan", "Mohd. F. Khan", "Mohd. Faisal Khan"],
+    ["Vijay Pratap Sharma", "Vijay P. Sharma"],
+    ["Santosh Kumar Vishvakarma", "Santosh K. Vishvakarma", "Santosh Vishvakarma"]
+  ];
+  const authorKey = name => name.normalize("NFKC").replace(/\./g, "").replace(/\s+/g, " ").trim().toLowerCase();
+  const authorAliases = new Map(authorGroups.flatMap(group => group.map(name => [authorKey(name), group[0]])));
+  const canonicalizeAuthors = authors => String(authors).split(",").map(name => {
+    const cleaned = name.replace(/\s+/g, " ").trim();
+    return authorAliases.get(authorKey(cleaned)) || cleaned;
+  }).join(", ");
+
+  // A personal page, preprint, recording, or generic publisher homepage is
+  // not evidence of publication. Check both the exact hostname and path.
+  const isPublishedLink = value => {
+    try {
+      const url = new URL(value);
+      if (url.protocol !== "https:" && url.protocol !== "http:") return false;
+      const host = url.hostname.toLowerCase();
+      const path = url.pathname;
+      if (host === "doi.org" || host === "dx.doi.org") return /^\/10\.\d{4,9}\/\S+/i.test(path);
+      if (host === "ieeexplore.ieee.org") return /^\/(?:abstract\/)?document\/\d+(?:\/|$)/.test(path);
+      if (host === "sciencedirect.com" || host === "www.sciencedirect.com") return /^\/science\/article\/(?:pii|abs\/pii)\/[a-z0-9]+(?:\/|$)/i.test(path);
+      return false;
+    } catch (_error) {
+      return false;
+    }
+  };
+
+  const normalizePublication = publication => {
+    const result = { ...publication, authors: canonicalizeAuthors(publication.authors) };
+    if (result.type !== "journal" && result.type !== "conference") return result;
+    const acceptedLabel = /^\[?\s*accepted\s*\]?$/i.test(String(result.status || "").trim());
+    const accepted = result.accepted === true || acceptedLabel;
+    if (accepted) result.accepted = true;
+    const published = result.published === true || isPublishedLink(result.url);
+    if (published) {
+      if (acceptedLabel) delete result.status;
+    } else if (accepted) {
+      result.status = "[Accepted]";
+    }
+    return result;
+  };
+
+  const normalizePublications = publications => {
+    if (!Array.isArray(publications)) throw new Error("PUBLICATIONS must be an array.");
+    const seen = new Set();
+    return publications.map((publication, index) => {
+      const label = `Publication ${index + 1}`;
+      if (!publication || !["journal", "conference", "advanced", "patent"].includes(publication.type)) throw new Error(`${label}: invalid type.`);
+      if (!Number.isInteger(publication.year) || publication.year < 1900 || publication.year > 2200) throw new Error(`${label}: invalid year.`);
+      for (const field of ["title", "authors", "venue"]) {
+        if (typeof publication[field] !== "string" || !publication[field].trim()) throw new Error(`${label}: missing ${field}.`);
+      }
+      for (const field of ["accepted", "published"]) {
+        if (publication[field] !== undefined && typeof publication[field] !== "boolean") throw new Error(`${label}: ${field} must be true or false.`);
+      }
+      const key = publication.title.trim().toLowerCase().replace(/\s+/g, " ");
+      if (seen.has(key)) throw new Error(`${label}: duplicate title ${publication.title}.`);
+      seen.add(key);
+      return normalizePublication(publication);
+    });
+  };
+
+  return { canonicalizeAuthors, isPublishedLink, normalizePublication, normalizePublications };
+});
