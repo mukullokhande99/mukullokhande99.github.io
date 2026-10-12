@@ -9,14 +9,26 @@
   const authorGroups = [
     ["Mohd F. Khan", "Mohd Faisal Khan", "Mohd. F. Khan", "Mohd. Faisal Khan"],
     ["Vijay P. Sharma", "Vijay Pratap Sharma"],
-    ["Santosh K. Vishvakarma", "Santosh Kumar Vishvakarma", "Santosh Vishvakarma"]
+    ["Santosh K. Vishvakarma", "Santosh Kumar Vishvakarma", "Santosh Vishvakarma"],
+    ["Mohd S. Mansoori", "Mohd. S. Mansoori"]
   ];
   const authorKey = name => name.normalize("NFKC").replace(/\./g, "").replace(/\s+/g, " ").trim().toLowerCase();
   const authorAliases = new Map(authorGroups.flatMap(group => group.map(name => [authorKey(name), group[0]])));
-  const canonicalizeAuthors = authors => String(authors).split(",").map(name => {
+  const nameParticles = new Set(["van", "von", "de", "del", "da", "di", "dos", "bin", "bint", "al", "el"]);
+  const canonicalizeAuthor = name => {
     const cleaned = name.replace(/\s+/g, " ").trim();
-    return authorAliases.get(authorKey(cleaned)) || cleaned;
-  }).join(", ");
+    const known = authorAliases.get(authorKey(cleaned));
+    if (known) return known;
+    const parts = cleaned.split(" ");
+    if (parts.length !== 3) return cleaned;
+    // Honorifics, suffixes, and surname particles are not middle names.
+    if (/^(Mr|Mrs|Ms|Dr|Prof)\.?$/i.test(parts[0]) || /^(Jr|Sr|II|III|IV)\.?$/i.test(parts[2])) return cleaned;
+    if (nameParticles.has(parts[1].toLowerCase())) return cleaned;
+    if (!/^\p{L}[\p{L}'’\-]*\.?$/u.test(parts[1])) return cleaned;
+    const initial = Array.from(parts[1])[0].toUpperCase();
+    return `${parts[0]} ${initial}. ${parts[2]}`;
+  };
+  const canonicalizeAuthors = authors => String(authors).split(",").map(canonicalizeAuthor).join(", ");
 
   // A personal page, preprint, recording, or generic publisher homepage is
   // not evidence of publication. Check both the exact hostname and path.

@@ -5,8 +5,12 @@ The website and GitHub checker share `publication-rules.js`.
 The canonical website names are Mohd F. Khan, Vijay P. Sharma, and Santosh K.
 Vishvakarma. Their full names and verified variants are converted to these
 abbreviations in all author lists, including patents and advanced revisions.
-Other authors are preserved. In `authorGroups`, the first name is the canonical
-form; the remaining names are recognized aliases.
+Other three-part names use full first name, middle initial with a period, and
+full surname (for example, Narendra Singh Dhakad becomes Narendra S. Dhakad).
+Honorifics, suffixes, surname particles, and names with a different number of
+parts retain their spelling. In `authorGroups`, the first name is the canonical
+form; the remaining names are recognized aliases. Collaborator matching applies
+the same rules to each alias so name formatting does not change shared-work counts.
 
 For an accepted journal or conference paper, set `accepted: true` in
 `publications.js`. The website supplies `[Accepted]` automatically. Existing

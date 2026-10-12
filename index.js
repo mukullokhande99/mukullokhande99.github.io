@@ -378,7 +378,8 @@
     if (!collaborationList) return;
 
     const rankedCollaborators = collaboratorProfiles.map((profile, profileOrder) => {
-      const works = publications.filter(publication => profile.aliases.some(alias => publication.authors.includes(alias)))
+      const aliases = profile.aliases.map(alias => window.PublicationRules.canonicalizeAuthors(alias));
+      const works = publications.filter(publication => publication.authors.split(",").some(author => aliases.includes(author.trim())))
         .sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
       const publishedCount = works.filter(publication => publication.type !== "advanced").length;
       const advancedCount = works.length - publishedCount;

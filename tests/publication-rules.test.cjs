@@ -17,6 +17,25 @@ test("verified name aliases use canonical abbreviations without changing unrelat
   }
 });
 
+test("three-part author names consistently use a middle initial", () => {
+  for (const [input, output] of [
+    ["Narendra Singh Dhakad", "Narendra S. Dhakad"],
+    ["Ankit Kumar Tenwar", "Ankit K. Tenwar"],
+    ["Arjun S Nair", "Arjun S. Nair"],
+    ["Isuru S Dasanayake", "Isuru S. Dasanayake"],
+    ["Kwok T Chui", "Kwok T. Chui"],
+    ["Brij B Gupta", "Brij B. Gupta"],
+    ["Mohd. S. Mansoori", "Mohd S. Mansoori"],
+    ["Omkar Rajesh Kokane", "Omkar R. Kokane"]
+  ]) {
+    assert.equal(rules.canonicalizeAuthors(input), output);
+    assert.equal(rules.canonicalizeAuthors(output), output);
+  }
+  for (const input of ["Mukul Lokhande", "S. V. Jaya Chand", "Dr. Adam Teman", "First Last Jr.", "Ludwig van Beethoven"]) {
+    assert.equal(rules.canonicalizeAuthors(input), input);
+  }
+});
+
 test("acceptance requires an explicit flag or accepted label", () => {
   assert.equal(rules.normalizePublication(fixture({accepted:true})).status, "[Accepted]");
   assert.equal(rules.normalizePublication(fixture({status:" accepted "})).status, "[Accepted]");
@@ -112,4 +131,11 @@ test("browser rendering uses the same correction rules and emits acceptance badg
   c.activeFilter="journal";c.activeYear="all";c.search.value="FALCON-XR";
   vm.runInContext('render();',c);
   assert.doesNotMatch(c.list.innerHTML,/pub-status/);
+  c.PUBLICATIONS.push(c.PublicationRules.normalizePublication(fixture({title:"Long-form collaborator alias",authors:"Omkar Rajesh Kokane"})));
+  c.collaborationList={innerHTML:"",querySelectorAll:()=>[]};
+  c.window.requestAnimationFrame=()=>{};
+  c.window.addEventListener=()=>{};
+  vm.runInContext(js.slice(js.indexOf('  const collaboratorProfiles ='),js.indexOf('  const render ='))+'renderCollaborations();',c);
+  const omkarCard=c.collaborationList.innerHTML.split('<article class="collaboration-card reveal">').find(card=>card.includes('Mr. Omkar Kokane'));
+  assert.ok(omkarCard.includes('Long-form collaborator alias'));
 });
