@@ -7,13 +7,13 @@ const vm = require("node:vm");
 const rules = require("../publication-rules.js");
 const { synchronize } = require("../scripts/check-publications.cjs");
 const root = path.resolve(__dirname, "..");
-const fixture = extra => ({ type: "conference", year: 2027, title: "Example paper", authors: "Mohd F. Khan, Vijay P. Sharma, Santosh K. Vishvakarma", venue: "Example Conference, Jan. 2027", ...extra });
+const fixture = extra => ({ type: "conference", year: 2027, title: "Example paper", authors: "Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma", venue: "Example Conference, Jan. 2027", ...extra });
 
-test("verified name aliases expand without changing unrelated people", () => {
-  assert.equal(rules.canonicalizeAuthors(" Mohd. F. Khan, VIJAY  P SHARMA, Santosh Vishvakarma, Adam Teman, Ratko Pilipović "), "Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma, Adam Teman, Ratko Pilipović");
+test("verified name aliases use canonical abbreviations without changing unrelated people", () => {
+  assert.equal(rules.canonicalizeAuthors(" Mohd. F. Khan, VIJAY  P SHARMA, Santosh Vishvakarma, Adam Teman, Ratko Pilipović "), "Mohd F. Khan, Vijay P. Sharma, Santosh K. Vishvakarma, Adam Teman, Ratko Pilipović");
   assert.equal(rules.canonicalizeAuthors("Vijay P. Sharma Jr., Other Khan"), "Vijay P. Sharma Jr., Other Khan");
   for (const type of ["conference", "journal", "advanced", "patent"]) {
-    assert.equal(rules.normalizePublication(fixture({type})).authors, "Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma");
+    assert.equal(rules.normalizePublication(fixture({type})).authors, "Mohd F. Khan, Vijay P. Sharma, Santosh K. Vishvakarma");
   }
 });
 
@@ -70,7 +70,7 @@ test("source correction updates names, badges, totals, new years, and cache vers
     vm.runInNewContext(fs.readFileSync(path.join(dir,"publications.js"),"utf8"),c);
     assert.equal(c.window.PUBLICATIONS[0].status,"[Accepted]");
     assert.equal(c.window.PUBLICATIONS[1].status,undefined);
-    assert.equal(c.window.PUBLICATIONS[0].authors,"Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma");
+    assert.equal(c.window.PUBLICATIONS[0].authors,"Mohd F. Khan, Vijay P. Sharma, Santosh K. Vishvakarma");
     const html=fs.readFileSync(path.join(dir,"index.html"),"utf8");
     assert.match(html,/id="paper-breakdown">0 journals · 2 conferences/);
     assert.match(html,/data-year="2028"[^>]*>2028 <span>1<\/span>/);
@@ -92,7 +92,7 @@ test("browser rendering uses the same correction rules and emits acceptance badg
   vm.runInContext(fs.readFileSync(path.join(root,"publication-rules.js"),"utf8"),c);
   vm.runInContext(fs.readFileSync(path.join(root,"publications.js"),"utf8"),c);
   const prime=c.PUBLICATIONS.find(p=>p.title.startsWith("PRIME:"));
-  prime.authors="Mohd F. Khan, Vijay P. Sharma, Santosh Vishvakarma";
+  prime.authors="Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma";
   prime.accepted=true;
   delete prime.status;
   c.PUBLICATIONS.find(p=>p.title.startsWith("FALCON-XR:")).status="[Accepted]";
@@ -104,7 +104,7 @@ test("browser rendering uses the same correction rules and emits acceptance badg
   vm.runInContext(initialization+rendering+'render();',c);
   assert.equal(c.count.textContent,"1 work");
   assert.match(c.list.innerHTML,/<span class="pub-status accepted">\[Accepted\]<\/span>/);
-  assert.match(c.list.innerHTML,/Mohd Faisal Khan, Vijay Pratap Sharma, Santosh Kumar Vishvakarma/);
+  assert.ok(c.list.innerHTML.includes("Mohd F. Khan, Vijay P. Sharma, Santosh K. Vishvakarma"));
   c.search.value="VALQER:";
   vm.runInContext('render();',c);
   assert.equal(c.count.textContent,"1 work");

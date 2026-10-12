@@ -2,10 +2,11 @@
 
 The website and GitHub checker share `publication-rules.js`.
 
-Known variants of Mohd Faisal Khan, Vijay Pratap Sharma, and Santosh Kumar
-Vishvakarma are expanded to those full names in all author lists, including
-patents and advanced revisions. Other authors are preserved. Add verified
-aliases to `authorGroups` when needed.
+The canonical website names are Mohd F. Khan, Vijay P. Sharma, and Santosh K.
+Vishvakarma. Their full names and verified variants are converted to these
+abbreviations in all author lists, including patents and advanced revisions.
+Other authors are preserved. In `authorGroups`, the first name is the canonical
+form; the remaining names are recognized aliases.
 
 For an accepted journal or conference paper, set `accepted: true` in
 `publications.js`. The website supplies `[Accepted]` automatically. Existing

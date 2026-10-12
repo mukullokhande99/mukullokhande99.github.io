@@ -5,11 +5,11 @@
 })(typeof globalThis === "object" ? globalThis : this, function () {
   "use strict";
 
-  // Add only verified aliases here; unrelated authors retain their names.
+  // The first name is the canonical website form. Add only verified aliases.
   const authorGroups = [
-    ["Mohd Faisal Khan", "Mohd F. Khan", "Mohd. F. Khan", "Mohd. Faisal Khan"],
-    ["Vijay Pratap Sharma", "Vijay P. Sharma"],
-    ["Santosh Kumar Vishvakarma", "Santosh K. Vishvakarma", "Santosh Vishvakarma"]
+    ["Mohd F. Khan", "Mohd Faisal Khan", "Mohd. F. Khan", "Mohd. Faisal Khan"],
+    ["Vijay P. Sharma", "Vijay Pratap Sharma"],
+    ["Santosh K. Vishvakarma", "Santosh Kumar Vishvakarma", "Santosh Vishvakarma"]
   ];
   const authorKey = name => name.normalize("NFKC").replace(/\./g, "").replace(/\s+/g, " ").trim().toLowerCase();
   const authorAliases = new Map(authorGroups.flatMap(group => group.map(name => [authorKey(name), group[0]])));
