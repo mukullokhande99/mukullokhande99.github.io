@@ -197,8 +197,10 @@
   const heroPublicationTotal = document.querySelector("#hero-publication-total");
   const paperTotalElement = document.querySelector("#paper-total");
   const patentTotalElement = document.querySelector("#patent-total");
+  const paperBreakdownElement = document.querySelector("#paper-breakdown");
   if (heroPublicationTotal) heroPublicationTotal.textContent = totals.all;
   if (paperTotalElement) paperTotalElement.textContent = paperTotal;
+  if (paperBreakdownElement) paperBreakdownElement.textContent = `${totals.journal || 0} journals · ${totals.conference || 0} conferences`;
   if (patentTotalElement) patentTotalElement.textContent = patentTotal;
 
   const updateVisitorCount = async () => {
