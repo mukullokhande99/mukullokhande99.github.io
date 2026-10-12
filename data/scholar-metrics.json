@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 160,
+  "citations": 171,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -21,7 +21,7 @@
     },
     {
       "title": "Bio-rv: Low-power resource-efficient risc-v processor for biomedical applications",
-      "citations": 2,
+      "citations": 4,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=2000027724541432098"
     },
     {
@@ -41,7 +41,7 @@
     },
     {
       "title": "Flex-PE: Flexible and SIMD multiprecision processing element for AI workloads",
-      "citations": 54,
+      "citations": 57,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12966948204058567294"
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
-      "citations": 14,
+      "citations": 15,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "title": "RAMAN: Resource-efficient approximate posit processing for algorithm-hardware co-design",
-      "citations": 6,
+      "citations": 8,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3501228015545828363"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
       "title": "ReLANCE: A Resource-Efficient Low-Latency Cortical Neural Acceleration Engine",
-      "citations": 2,
+      "citations": 3,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1826341444851106079"
     },
     {
@@ -101,7 +101,7 @@
     },
     {
       "title": "ULTRA-MACE: A Unified Low-bit Trans-precision Reconfigurable Multiply-Accumulate Compute Engine for Accelerated Computing",
-      "citations": 2,
+      "citations": 4,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=14802770772856967881"
     },
     {
@@ -110,6 +110,6 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-10-05T10:33:23Z",
+  "updated_at": "2026-10-12T10:58:16Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
