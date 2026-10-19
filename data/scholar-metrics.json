@@ -1,17 +1,17 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 171,
+  "citations": 178,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
     {
       "title": "A NOR8T SRAM Digital Compute-in-Memory Macro for Sparse and Scalable Edge-AI Processing",
-      "citations": 2,
+      "citations": 3,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16219115234406828143"
     },
     {
       "title": "Area-optimized 2D Interleaved Adder Tree Design for Sparse DCIM Edge Processing",
-      "citations": 11,
+      "citations": 12,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=4895385300727195788"
     },
     {
@@ -21,11 +21,16 @@
     },
     {
       "title": "Bio-rv: Low-power resource-efficient risc-v processor for biomedical applications",
-      "citations": 4,
+      "citations": 5,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=2000027724541432098"
     },
     {
       "title": "BRAIN-AD: A Bit-Serial, ReRAM-Empowered Digital Processing-in-Memory Macro for Autonomous Driving",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
+      "title": "CURIE: An Area-Efficient 63-TOPS/W Multi-Precision 4 Kb Digital Memory-In-Situ Inference Engine for DNNs & Spiking ML Workloads",
       "citations": 0,
       "cited_by_url": ""
     },
@@ -35,8 +40,13 @@
       "cited_by_url": ""
     },
     {
+      "title": "FALCON-XR: Flexible and hybrid low-precision floating-point compute engine for energy-efficient XR perception acceleration",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
       "title": "FERMI-ML: A Flexible and Resource-Efficient Memory-In-Situ SRAM Macro for TinyML Acceleration",
-      "citations": 1,
+      "citations": 2,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=15038365319763893469"
     },
     {
@@ -51,7 +61,7 @@
     },
     {
       "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
-      "citations": 15,
+      "citations": 16,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
     },
     {
@@ -71,7 +81,7 @@
     },
     {
       "title": "RAPID: Re-Configurable Adder Tree Based Performance-Incentivized AI Digital CIM Macro",
-      "citations": 1,
+      "citations": 2,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=10700881031867476828"
     },
     {
@@ -106,10 +116,10 @@
     },
     {
       "title": "XR-NPE: High-Throughput Mixed-precision SIMD Neural Processing Engine for Extended Reality Perception Workloads",
-      "citations": 5,
+      "citations": 6,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-10-12T10:58:16Z",
+  "updated_at": "2026-10-19T08:59:33Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
