@@ -56,6 +56,9 @@
     const published = result.published === true || isPublishedLink(result.url);
     if (published) {
       if (acceptedLabel) delete result.status;
+    } else if (accepted && result.type === "journal" && result.acceptanceDate && result.month) {
+      // Dated journal acceptance is shown in the venue, without a conference-style badge.
+      delete result.status;
     } else if (accepted) {
       result.status = "[Accepted]";
     }
