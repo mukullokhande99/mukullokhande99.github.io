@@ -4,6 +4,7 @@
   const list = document.querySelector("#publication-list");
   const collaborationList = document.querySelector("#collaboration-list");
   const search = document.querySelector("#publication-search");
+  const firstAuthorFilter = document.querySelector("#first-author-filter");
   const count = document.querySelector("#result-count");
   const empty = document.querySelector("#empty-state");
   const typeFilters = [...document.querySelectorAll(".type-filter")];
@@ -21,6 +22,7 @@
   const typeLabels = { journal: "Journal", conference: "Conference", patent: "Patent", advanced: "Advanced stage" };
   let activeFilter = "all";
   let activeYear = "all";
+  let activeAuthor = "all";
   let scholarArticles = [];
 
   const readSpatialPreference = () => {
@@ -269,12 +271,27 @@
     }
   };
 
+  // Publication author lists are comma-separated strings, in credited order.
+  const firstAuthorOf = publication => String(publication.authors || "").split(",")[0].trim();
+  const firstAuthorCounts = new Map();
+  publications.forEach(publication => {
+    const author = firstAuthorOf(publication);
+    if (author) firstAuthorCounts.set(author, (firstAuthorCounts.get(author) || 0) + 1);
+  });
+  [...firstAuthorCounts.keys()].sort((a, b) => a.localeCompare(b)).forEach(author => {
+    const option = document.createElement("option");
+    option.value = author;
+    option.textContent = `${author} (${firstAuthorCounts.get(author)})`;
+    firstAuthorFilter.appendChild(option);
+  });
+
   const updateFilterCounts = () => {
     typeFilters.forEach(button => {
       const type = button.dataset.filter;
       const total = publications.filter(publication =>
         (type === "all" ? true : publication.type === type) &&
-        (activeYear === "all" || publication.year === Number(activeYear))
+        (activeYear === "all" || publication.year === Number(activeYear)) &&
+        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -282,7 +299,8 @@
       const year = button.dataset.year;
       const total = publications.filter(publication =>
         (year === "all" || publication.year === Number(year)) &&
-        (activeFilter === "all" ? true : publication.type === activeFilter)
+        (activeFilter === "all" ? true : publication.type === activeFilter) &&
+        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -446,8 +464,9 @@
     const matches = publications.filter(publication => {
       const isType = activeFilter === "all" ? true : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
+      const isAuthor = activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor;
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
-      return isType && isYear && haystack.includes(query);
+      return isType && isYear && isAuthor && haystack.includes(query);
     }).sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
 
     count.textContent = `${matches.length} ${matches.length === 1 ? "work" : "works"}`;
@@ -508,6 +527,11 @@
   }));
 
   search.addEventListener("input", render);
+  firstAuthorFilter.addEventListener("change", () => {
+    activeAuthor = firstAuthorFilter.value;
+    updateFilterCounts();
+    render();
+  });
 
   const menuButton = document.querySelector(".menu-button");
   const nav = document.querySelector("#site-nav");
