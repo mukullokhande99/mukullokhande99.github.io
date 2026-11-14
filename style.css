@@ -1122,3 +1122,117 @@ input,select,button { max-width: 100%; }
   }
   .publication-lookup .first-author-control select { min-height: 44px; }
 }
+
+
+/* XR design refresh — calm aerospace palette with restrained motion. */
+:root {
+  --ink: #0b1625;
+  --ink-2: #14283b;
+  --paper: #f1f5f8;
+  --white: #ffffff;
+  --muted: #617387;
+  --line: #d4dee7;
+  --acid: #a7e2e6;
+  --cyan: #62c5d4;
+  --blue: #356da5;
+}
+.site-header { background: rgba(9,23,39,.96); border-bottom-color: #263d52; }
+.site-header .brand-mark { color: var(--acid); }
+.site-header .header-link { color: #b5e3ea; border-bottom-color: #577b93; }
+.site-header nav a.active { color: #b6e5e9; }
+.site-header nav a.active::before { box-shadow: 0 0 0 2px rgba(98,197,212,.12); }
+.home-hero {
+  background: radial-gradient(ellipse at 80% 34%, #173651 0%, #0d2035 43%, #0b1625 78%);
+}
+.home-hero h1 span { color: #b5e5e9; }
+.home-hero .button.primary { background: #a7e2e6; border-color: #a7e2e6; }
+.home-hero .button.primary:hover { background: #c4eff0; border-color: #c4eff0; }
+.home-hero .button.secondary { border-color: #638399; }
+.home-hero .button.secondary:hover { border-color: #a7e2e6; }
+.hero-circuit {
+  opacity: .65;
+  background-image: linear-gradient(rgba(123,190,209,.10) 1px,transparent 1px),linear-gradient(90deg,rgba(123,190,209,.10) 1px,transparent 1px);
+  background-size: 56px 56px;
+}
+.spatial-frame i:nth-child(3), .spatial-frame i:nth-child(4) { border-color: rgba(167,226,230,.5); }
+.focus-card:hover { background: #142d41; }
+.metrics-bar strong { color: #356da5; }
+.publication-item:hover { background: rgba(215,233,243,.42); }
+.filter.active { background: var(--ink); color: #e2f5f7; }
+.lab-shell { border-color: #45677c; }
+.lab-shell::after { border-color: #a7e2e6; }
+
+/* XR orbital tracking: decorative, GPU-friendly, behind the portfolio content. */
+.xr-field {
+  position: absolute;
+  width: clamp(300px,43vw,690px);
+  aspect-ratio: 1;
+  top: 8%;
+  right: 2%;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: .7;
+  transform: translate3d(0,0,0);
+  background: radial-gradient(circle,transparent 0 16%,rgba(98,197,212,.10) 16.2% 16.5%,transparent 16.8% 42%,rgba(98,197,212,.14) 42.2% 42.5%,transparent 43% 100%);
+}
+.xr-field::before,.xr-field::after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px dashed rgba(125,207,219,.23);
+  animation: xr-rotate 52s linear infinite;
+}
+.xr-field::after { inset: 27%; border-style: solid; border-color: rgba(167,226,230,.25); animation-direction: reverse; animation-duration: 36s; }
+.xr-orbit { position: absolute; border: 1px solid rgba(98,197,212,.34); border-radius: 50%; inset: 4%; }
+.xr-orbit-one { transform: rotate(26deg) scaleY(.48); animation: xr-tilt 18s ease-in-out infinite alternate; }
+.xr-orbit-two { transform: rotate(-32deg) scaleY(.58); animation: xr-tilt-alt 23s ease-in-out infinite alternate; border-color: rgba(167,226,230,.22); }
+.xr-sweep {
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg,transparent 0deg,transparent 305deg,rgba(98,197,212,.12) 345deg,transparent 360deg);
+  animation: xr-rotate 16s linear infinite;
+}
+.xr-crosshair { position: absolute; width: 22px; height: 22px; left: calc(50% - 11px); top: calc(50% - 11px); border: 1px solid rgba(167,226,230,.50); transform: rotate(45deg); }
+.xr-crosshair::before,.xr-crosshair::after { content: ""; position: absolute; background: rgba(167,226,230,.35); }
+.xr-crosshair::before { width: 40px; height: 1px; left: -10px; top: 10px; }
+.xr-crosshair::after { height: 40px; width: 1px; top: -10px; left: 10px; }
+@keyframes xr-rotate { to { transform: rotate(360deg); } }
+@keyframes xr-tilt { to { transform: rotate(80deg) scaleY(.55); } }
+@keyframes xr-tilt-alt { to { transform: rotate(-85deg) scaleY(.46); } }
+
+/* Subtle scan line and tracking pips on the interactive XR scene. */
+body[data-spatial="on"] .lab-viewport::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 7;
+  pointer-events: none;
+  background: linear-gradient(to bottom,transparent 0%,rgba(98,197,212,.09) 49.8%,rgba(167,226,230,.20) 50%,transparent 50.3%);
+  background-size: 100% 180%;
+  animation: xr-scan 12s ease-in-out infinite alternate;
+}
+@keyframes xr-scan { from { background-position: 0 100%; opacity: .35; } to { background-position: 0 -100%; opacity: .8; } }
+body[data-spatial="on"] .hero-circuit > i {
+  animation: xr-beacon 5s ease-in-out infinite;
+}
+body[data-spatial="on"] .hero-circuit > i:nth-of-type(2) { animation-delay: -1.6s; }
+body[data-spatial="on"] .hero-circuit > i:nth-of-type(3) { animation-delay: -3s; }
+body[data-spatial="on"] .hero-circuit > i:nth-of-type(4) { animation-delay: -4.2s; }
+@keyframes xr-beacon { 0%,100% { opacity: .4; transform: scale(.85); } 50% { opacity: 1; transform: scale(1.25); } }
+body[data-spatial="off"] .xr-field,
+body[data-spatial="off"] .lab-viewport::after { display: none; }
+
+/* No motion on reduced-motion devices; maintain strong static depth cues. */
+@media (prefers-reduced-motion: reduce) {
+  .xr-field *, .xr-field::before,.xr-field::after,
+  .hero-circuit > i, .lab-viewport::after { animation: none !important; }
+}
+@media (max-width: 1050px) {
+  .xr-field { width: min(72vw,540px); top: 18%; right: -7%; opacity: .45; }
+}
+@media (max-width: 720px) {
+  .xr-field { width: 88vw; top: 12%; right: -22%; opacity: .30; }
+  body[data-spatial="on"] .lab-viewport::after { opacity: .4; }
+}
