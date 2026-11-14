@@ -297,18 +297,49 @@
     firstAuthorFilter.appendChild(option);
   });
 
-  // The title list follows the current publication type, year and first author.
+  // Group papers by publication venue instead of their individual titles.
+  // Conference locations/dates and journal issue metadata are not part of a venue.
+  const venueOf = publication => {
+    const venue = String(publication.venue || "").trim();
+    if (publication.type === "patent") return "Patent applications";
+    if (/Transactions on Very Large Scale Integration/i.test(venue)) return "IEEE Transactions on VLSI Systems (TVLSI)";
+    if (/Transactions on Nanotechnology/i.test(venue)) return "IEEE Transactions on Nanotechnology";
+    if (/Transactions on Computer-Aided Design/i.test(venue)) return "IEEE Transactions on Computer-Aided Design (TCAD)";
+    if (/Transactions on Computers/i.test(venue)) return "IEEE Transactions on Computers";
+    if (/Embedded Systems Letters/i.test(venue)) return "IEEE Embedded Systems Letters";
+    if (/Journal of Systems Architecture/i.test(venue)) return "Journal of Systems Architecture";
+    if (/Integration, the VLSI Journal/i.test(venue)) return "Integration, the VLSI Journal";
+    if (/VLSI Design and.*Embedded Systems \(VLSI-D\)/i.test(venue)) return "International Conference on VLSI Design (VLSI-D)";
+    if (/Quality Electronic Design|\bISQED\b/i.test(venue)) return "International Symposium on Quality Electronic Design (ISQED)";
+    if (/\b(?:VLSI Design and Test|VDAT)\b/i.test(venue)) return "VLSI Design and Test (VDAT)";
+    if (/Smart Electronic(?:s)? Systems|\biSES\b/i.test(venue)) return "International Symposium on Smart Electronic Systems (iSES)";
+    if (/\bAICAS\b/i.test(venue)) return "IEEE AICAS";
+    if (/\bIATMSI\b/i.test(venue)) return "IATMSI";
+    if (/International Conference on Microelectronics/i.test(venue)) return "International Conference on Microelectronics";
+    if (/Industrial and Information Systems/i.test(venue)) return "International Conference on Industrial and Information Systems";
+    if (/Emerging Electronics/i.test(venue)) return "International Conference on Emerging Electronics";
+    if (/Microwaves, Antennas and Propagation/i.test(venue)) return "IEEE Microwaves, Antennas and Propagation Conference";
+    if (/Asia Pacific Conference on Circuits and Systems/i.test(venue)) return "IEEE Asia Pacific Conference on Circuits and Systems (APCCAS)";
+    if (/Computer Society Annual Symposium on VLSI/i.test(venue)) return "IEEE Computer Society Annual Symposium on VLSI (ISVLSI)";
+    if (/International Symposium on Circuits and Systems/i.test(venue)) return "IEEE International Symposium on Circuits and Systems (ISCAS)";
+    return venue.split(",")[0].trim();
+  };
+
   const updateTitleOptions = () => {
     const eligible = publications.filter(publication =>
       (activeFilter === "all" || publication.type === activeFilter) &&
       (activeYear === "all" || publication.year === Number(activeYear)) &&
       (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
     );
-    const titles = [...new Set(eligible.map(publication => publication.title))]
-      .sort((a, b) => a.localeCompare(b));
-    if (activeTitle !== "all" && !titles.includes(activeTitle)) activeTitle = "all";
-    titleFilter.replaceChildren(new Option(`All publication titles (${eligible.length})`, "all"));
-    titles.forEach(title => titleFilter.add(new Option(title, title)));
+    const venueCounts = new Map();
+    eligible.forEach(publication => {
+      const venue = venueOf(publication);
+      venueCounts.set(venue, (venueCounts.get(venue) || 0) + 1);
+    });
+    const venues = [...venueCounts.keys()].sort((a, b) => a.localeCompare(b));
+    if (activeTitle !== "all" && !venues.includes(activeTitle)) activeTitle = "all";
+    titleFilter.replaceChildren(new Option(`All journals & conferences (${eligible.length})`, "all"));
+    venues.forEach(venue => titleFilter.add(new Option(`${venue} (${venueCounts.get(venue)})`, venue)));
     titleFilter.value = activeTitle;
   };
 
@@ -319,7 +350,7 @@
         (type === "all" ? true : publication.type === type) &&
         (activeYear === "all" || publication.year === Number(activeYear)) &&
         (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor) &&
-        (activeTitle === "all" || publication.title === activeTitle)
+        (activeTitle === "all" || venueOf(publication) === activeTitle)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -329,7 +360,7 @@
         (year === "all" || publication.year === Number(year)) &&
         (activeFilter === "all" ? true : publication.type === activeFilter) &&
         (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor) &&
-        (activeTitle === "all" || publication.title === activeTitle)
+        (activeTitle === "all" || venueOf(publication) === activeTitle)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -494,7 +525,7 @@
       const isType = activeFilter === "all" ? true : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const isAuthor = activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor;
-      const isTitle = activeTitle === "all" || publication.title === activeTitle;
+      const isTitle = activeTitle === "all" || venueOf(publication) === activeTitle;
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
       return isType && isYear && isAuthor && isTitle && haystack.includes(query);
     }).sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
