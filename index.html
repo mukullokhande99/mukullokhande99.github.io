@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261114-title">
+  <link rel="stylesheet" href="style.css?v=20261114-align">
 </head>
 <body data-spatial="on">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -150,11 +150,11 @@
         <div class="publication-lookup">
           <label class="search-box"><span class="sr-only">Search publications</span><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path></svg><input id="publication-search" type="search" placeholder="Search title, author, venue…" autocomplete="off"></label>
           <label class="first-author-control" for="first-author-filter"><span>First author</span><select id="first-author-filter" aria-label="Filter publications by first author"><option value="all">All first authors</option></select></label>
+          <label class="first-author-control publication-venue-control" for="publication-title-filter"><span>Publication Title</span><select id="publication-title-filter" aria-label="Filter by journal or conference name"><option value="all">All journals &amp; conferences</option></select></label>
         </div>
         <div class="filter-stack">
           <div class="filter-row"><span class="filter-label">Type</span><div class="filter-group" role="group" aria-label="Filter publications by type"><button class="filter type-filter active" type="button" data-filter="all" aria-pressed="true">All <span>40</span></button><button class="filter type-filter" type="button" data-filter="journal" aria-pressed="false">Journals <span>10</span></button><button class="filter type-filter" type="button" data-filter="conference" aria-pressed="false">Conferences <span>26</span></button><button class="filter type-filter" type="button" data-filter="patent" aria-pressed="false">Patents <span>2</span></button><button class="filter type-filter" type="button" data-filter="advanced" aria-pressed="false">Advanced stage <span>2</span></button></div></div>
           <div class="filter-row"><span class="filter-label">Year</span><div class="filter-group year-filter-group" role="group" aria-label="Filter publications by year"><button class="filter year-filter active" type="button" data-year="all" aria-pressed="true">All years <span>40</span></button><button class="filter year-filter" type="button" data-year="2027" aria-pressed="false">2027 <span>4</span></button><button class="filter year-filter" type="button" data-year="2026" aria-pressed="false">2026 <span>23</span></button><button class="filter year-filter" type="button" data-year="2025" aria-pressed="false">2025 <span>12</span></button><button class="filter year-filter" type="button" data-year="2024" aria-pressed="false">2024 <span>1</span></button></div></div>
-          <label class="filter-row title-filter-row" for="publication-title-filter"><span class="filter-label">Journal / Conference</span><select id="publication-title-filter" aria-label="Filter by journal or conference name"><option value="all">All journals &amp; conferences</option></select></label>
         </div>
       </div>
       <div class="publication-summary"><span id="result-count">40 works</span><span>Latest verified journal indexing and metrics</span></div><div class="publication-list" id="publication-list" aria-live="polite"></div><p class="empty-state" id="empty-state" hidden>No publications match that search.</p>
