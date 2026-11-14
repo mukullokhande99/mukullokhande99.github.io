@@ -554,6 +554,27 @@
     menuButton.setAttribute("aria-expanded", "false");
     nav.classList.remove("open");
   }));
+  // Keep the mobile menu aligned with viewport changes and keyboard navigation.
+  const closeMobileMenu = () => {
+    menuButton.setAttribute("aria-expanded", "false");
+    menuButton.setAttribute("aria-label", "Open navigation");
+    nav.classList.remove("open");
+  };
+  menuButton.addEventListener("click", () => {
+    menuButton.setAttribute("aria-label", nav.classList.contains("open") ? "Close navigation" : "Open navigation");
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && nav.classList.contains("open")) {
+      closeMobileMenu();
+      menuButton.focus();
+    }
+  });
+  document.addEventListener("click", event => {
+    if (nav.classList.contains("open") && !nav.contains(event.target) && !menuButton.contains(event.target)) closeMobileMenu();
+  });
+  window.matchMedia("(min-width: 1051px)").addEventListener?.("change", event => {
+    if (event.matches) closeMobileMenu();
+  });
 
   const navTargets = [...nav.querySelectorAll('a[href^="#"]')]
     .map(link => ({ link, target: document.querySelector(link.getAttribute("href")) }))
