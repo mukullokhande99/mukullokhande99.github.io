@@ -313,7 +313,7 @@
     if (/Quality Electronic Design|\bISQED\b/i.test(venue)) return "International Symposium on Quality Electronic Design (ISQED)";
     if (/\b(?:VLSI Design and Test|VDAT)\b/i.test(venue)) return "VLSI Design and Test (VDAT)";
     if (/Smart Electronic(?:s)? Systems|\biSES\b/i.test(venue)) return "International Symposium on Smart Electronic Systems (iSES)";
-    if (/\bAICAS\b/i.test(venue)) return "IEEE AICAS";
+    if (/\bAICAS\b/i.test(venue)) return "8th IEEE International Conference on Artificial Intelligence Circuits and Systems (AICAS 2026)";
     if (/\bIATMSI\b/i.test(venue)) return "IATMSI";
     if (/International Conference on Microelectronics/i.test(venue)) return "International Conference on Microelectronics";
     if (/Industrial and Information Systems/i.test(venue)) return "International Conference on Industrial and Information Systems";
