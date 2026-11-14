@@ -338,7 +338,7 @@
     });
     const venues = [...venueCounts.keys()].sort((a, b) => a.localeCompare(b));
     if (activeTitle !== "all" && !venues.includes(activeTitle)) activeTitle = "all";
-    titleFilter.replaceChildren(new Option(`All journals & conferences (${eligible.length})`, "all"));
+    titleFilter.replaceChildren(new Option("All", "all"));
     venues.forEach(venue => titleFilter.add(new Option(`${venue} (${venueCounts.get(venue)})`, venue)));
     titleFilter.value = activeTitle;
   };
