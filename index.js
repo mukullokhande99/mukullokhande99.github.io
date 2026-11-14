@@ -15,6 +15,7 @@
   const collaborationList = document.querySelector("#collaboration-list");
   const search = document.querySelector("#publication-search");
   const firstAuthorFilter = document.querySelector("#first-author-filter");
+  const titleFilter = document.querySelector("#publication-title-filter");
   const count = document.querySelector("#result-count");
   const empty = document.querySelector("#empty-state");
   const typeFilters = [...document.querySelectorAll(".type-filter")];
@@ -33,6 +34,7 @@
   let activeFilter = "all";
   let activeYear = "all";
   let activeAuthor = "all";
+  let activeTitle = "all";
   let scholarArticles = [];
 
   const readSpatialPreference = () => {
@@ -295,13 +297,29 @@
     firstAuthorFilter.appendChild(option);
   });
 
+  // The title list follows the current publication type, year and first author.
+  const updateTitleOptions = () => {
+    const eligible = publications.filter(publication =>
+      (activeFilter === "all" || publication.type === activeFilter) &&
+      (activeYear === "all" || publication.year === Number(activeYear)) &&
+      (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
+    );
+    const titles = [...new Set(eligible.map(publication => publication.title))]
+      .sort((a, b) => a.localeCompare(b));
+    if (activeTitle !== "all" && !titles.includes(activeTitle)) activeTitle = "all";
+    titleFilter.replaceChildren(new Option(`All publication titles (${eligible.length})`, "all"));
+    titles.forEach(title => titleFilter.add(new Option(title, title)));
+    titleFilter.value = activeTitle;
+  };
+
   const updateFilterCounts = () => {
     typeFilters.forEach(button => {
       const type = button.dataset.filter;
       const total = publications.filter(publication =>
         (type === "all" ? true : publication.type === type) &&
         (activeYear === "all" || publication.year === Number(activeYear)) &&
-        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
+        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor) &&
+        (activeTitle === "all" || publication.title === activeTitle)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -310,7 +328,8 @@
       const total = publications.filter(publication =>
         (year === "all" || publication.year === Number(year)) &&
         (activeFilter === "all" ? true : publication.type === activeFilter) &&
-        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor)
+        (activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor) &&
+        (activeTitle === "all" || publication.title === activeTitle)
       ).length;
       button.querySelector("span").textContent = total;
     });
@@ -475,8 +494,9 @@
       const isType = activeFilter === "all" ? true : publication.type === activeFilter;
       const isYear = activeYear === "all" || publication.year === Number(activeYear);
       const isAuthor = activeAuthor === "all" || firstAuthorOf(publication) === activeAuthor;
+      const isTitle = activeTitle === "all" || publication.title === activeTitle;
       const haystack = [publication.title, publication.authors, publication.venue, publication.year, publication.status, publication.indexing, publication.quartile, publication.impactFactor].join(" ").toLowerCase();
-      return isType && isYear && isAuthor && haystack.includes(query);
+      return isType && isYear && isAuthor && isTitle && haystack.includes(query);
     }).sort((a, b) => publicationTimestamp(b) - publicationTimestamp(a));
 
     count.textContent = `${matches.length} ${matches.length === 1 ? "work" : "works"}`;
@@ -521,6 +541,7 @@
       candidate.classList.toggle("active", selected);
       candidate.setAttribute("aria-pressed", String(selected));
     });
+    updateTitleOptions();
     updateFilterCounts();
     render();
   }));
@@ -532,13 +553,21 @@
       candidate.classList.toggle("active", selected);
       candidate.setAttribute("aria-pressed", String(selected));
     });
+    updateTitleOptions();
     updateFilterCounts();
     render();
   }));
 
+  titleFilter.addEventListener("change", () => {
+    activeTitle = titleFilter.value;
+    updateFilterCounts();
+    render();
+  });
+
   search.addEventListener("input", render);
   firstAuthorFilter.addEventListener("change", () => {
     activeAuthor = firstAuthorFilter.value;
+    updateTitleOptions();
     updateFilterCounts();
     render();
   });
@@ -647,6 +676,7 @@
   enableDepthCards();
   updateScholarMetrics();
   updateVisitorCount();
+  updateTitleOptions();
   updateFilterCounts();
   render();
 })();
