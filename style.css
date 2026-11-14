@@ -1006,3 +1006,84 @@ body[data-spatial="off"] .vr-depth-card>* { transform: none!important; }
 .first-author-control select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 @media (max-width: 1050px) { .publication-lookup { width: 100%; flex-basis: auto; } }
 @media (max-width: 480px) { .first-author-control { align-items: stretch; flex-direction: column; gap: 7px; } .first-author-control select { flex: initial; width: 100%; } }
+
+/* Adaptive device layout: fluid sizing, no sideways overflow, touch-friendly controls. */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: clip; }
+main, section, .content-section, .hero-stage, .home-intro, .home-visual,
+.publication-tools, .filter-stack, .pub-main, .collaboration-card { min-width: 0; }
+h1,h2,h3,p, .pub-main, .contact-links strong { overflow-wrap: anywhere; }
+img,video,svg { max-width: 100%; }
+input,select,button { max-width: 100%; }
+:where(a,button,input,select,summary):focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+:where(.content-section,.home-hero) { scroll-margin-top: calc(var(--header) + 20px); }
+
+/* Laptop and tablet */
+@media (min-width: 721px) and (max-width: 1280px) {
+  .hero-stage { gap: clamp(20px,3vw,56px); }
+  .home-intro { min-width: 0; }
+  .home-hero h1 { font-size: clamp(3.8rem,7.4vw,6.6rem); }
+  .publication-tools { gap: clamp(14px,2vw,26px); }
+  .publication-item { grid-template-columns: minmax(82px,105px) minmax(0,1fr) 44px; gap: clamp(12px,2vw,24px); }
+}
+@media (max-width: 1050px) {
+  .site-header nav { max-height: calc(100dvh - var(--header)); overflow-y: auto; overscroll-behavior: contain; }
+  .site-header nav a { width: 100%; min-height: 44px; }
+  .menu-button { min-width: 44px; min-height: 44px; }
+  .publication-lookup { max-width: none; }
+  .publication-tools { gap: 18px; }
+  .filter-stack { justify-items: stretch; }
+  .filter-row { justify-content: flex-start; }
+  .first-author-control select { min-height: 44px; }
+}
+@media (max-width: 720px) {
+  :root { --header: 68px; }
+  .site-header { min-height: var(--header); padding-inline: 14px; }
+  .home-hero { padding-inline: clamp(14px,4vw,22px); }
+  .hero-stage { width: 100%; }
+  .home-intro { padding-top: clamp(36px,10vw,64px); }
+  .home-hero h1 { font-size: clamp(2.65rem,14vw,5rem); line-height: 1.02; letter-spacing: -.055em; }
+  .home-hero .hero-intro { max-width: 55ch; }
+  .home-hero .hero-actions { grid-template-columns: minmax(0,1fr); }
+  .home-hero .button { min-height: 48px; }
+  .lab-shell, .lab-viewport { min-width: 0; }
+  .lab-shell .profile-panel { height: clamp(280px,95vw,500px); }
+  .lab-node { min-width: 0; min-height: 64px; padding: 8px 5px; }
+  .lab-node strong { font-size: clamp(.7rem,3vw,.9rem); }
+  .lab-readout { min-width: 0; }
+  .publication-tools { padding-block: 18px; }
+  .publication-lookup { width: 100%; }
+  .search-box input { min-width: 0; font-size: 16px; }
+  .first-author-control select { font-size: 16px; }
+  .filter-group { max-width: 100%; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  .filter-group .filter { flex: 0 0 auto; min-height: 44px; }
+  .publication-item { grid-template-columns: minmax(0,1fr) auto; gap: 10px 12px; padding-block: 22px; }
+  .publication-item .pub-meta { grid-column: 1 / -1; }
+  .publication-item .pub-main { grid-column: 1; }
+  .publication-item .pub-link { grid-column: 2; grid-row: 2; }
+  .pub-main h3 { line-height: 1.35; }
+  .collaboration-list { grid-template-columns: minmax(0,1fr); }
+  .collaboration-card { grid-row-end: auto !important; }
+  .contact-links a { min-width: 0; }
+}
+@media (max-width: 380px) {
+  .brand { gap: 6px; }
+  .site-header .brand-copy strong { font-size: .74rem; }
+  .brand-mark { width: 32px; height: 32px; }
+  .header-actions { gap: 2px; }
+  .home-hero h1 { font-size: clamp(2.4rem,13vw,3.1rem); }
+  .lab-toolbar span:last-child { display: none; }
+  .lab-viewport { padding: 8px; }
+  .lab-shell .profile-panel { height: 85vw; }
+  .publication-item { gap: 10px; }
+}
+@media (max-height: 520px) and (orientation: landscape) and (max-width: 1050px) {
+  .site-header nav { max-height: calc(100dvh - var(--header)); }
+  .home-intro { padding-top: 30px; padding-bottom: 20px; }
+  .home-visual { min-height: 0; }
+  .lab-shell .profile-panel { height: min(65vw,340px); }
+}
+@media (pointer: coarse) {
+  .filter, .menu-button, .spatial-toggle, .lab-node { min-height: 44px; }
+  .publication-item:hover { padding-left: 0; padding-right: 0; }
+}
