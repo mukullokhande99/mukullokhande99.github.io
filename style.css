@@ -1087,3 +1087,11 @@ input,select,button { max-width: 100%; }
   .filter, .menu-button, .spatial-toggle, .lab-node { min-height: 44px; }
   .publication-item:hover { padding-left: 0; padding-right: 0; }
 }
+
+/* Scrollable, native publication title selector, responsive next to type/year. */
+.title-filter-row { width: 100%; }
+.title-filter-row .filter-label { flex: 0 0 auto; }
+.title-filter-row select { flex: 1 1 auto; min-width: 0; width: min(100%, 410px); min-height: 42px; padding: 8px 32px 8px 12px; border: 1px solid var(--line); border-radius: 0; background: var(--white); color: var(--ink); font: 500 .8rem/1.35 "DM Sans", sans-serif; cursor: pointer; text-overflow: ellipsis; }
+.title-filter-row select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+@media (max-width: 1050px) { .title-filter-row select { width: 100%; max-width: none; } }
+@media (max-width: 720px) { .title-filter-row select { min-height: 44px; font-size: 16px; } }
