@@ -1,4 +1,14 @@
 (() => {
+  // Once installed, this service worker fetches fresh HTML, JS, CSS and JSON
+  // on each navigation rather than serving an outdated browser-cached copy.
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js", { updateViaCache: "none" })
+        .then(registration => registration.update())
+        .catch(error => console.info("Automatic freshness is unavailable.", error));
+    });
+  }
+
   const publications = window.PublicationRules.normalizePublications(window.PUBLICATIONS || []);
   window.PUBLICATIONS = publications;
   const list = document.querySelector("#publication-list");
