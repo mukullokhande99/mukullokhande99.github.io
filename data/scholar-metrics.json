@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 193,
+  "citations": 199,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -13,6 +13,11 @@
       "title": "Area-optimized 2D Interleaved Adder Tree Design for Sparse DCIM Edge Processing",
       "citations": 12,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=4895385300727195788"
+    },
+    {
+      "title": "ARIES: ADC-Less 3T1R-based nvCIM macro for Edge AI applications",
+      "citations": 3,
+      "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=13520405823812803259"
     },
     {
       "title": "Bhasha-Rupantarika: Algorithm-Hardware Co-design approach for Multilingual Neural Machine Translation",
@@ -51,7 +56,7 @@
     },
     {
       "title": "Flex-PE: Flexible and SIMD multiprecision processing element for AI workloads",
-      "citations": 57,
+      "citations": 58,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12966948204058567294"
     },
     {
@@ -61,7 +66,7 @@
     },
     {
       "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
-      "citations": 17,
+      "citations": 19,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
     },
     {
@@ -130,6 +135,6 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-11-02T11:18:23Z",
+  "updated_at": "2026-11-16T11:32:40Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
