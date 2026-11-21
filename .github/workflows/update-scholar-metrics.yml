@@ -7,7 +7,7 @@ on:
       - "scripts/update_scholar_metrics.py"
       - ".github/workflows/update-scholar-metrics.yml"
   schedule:
-    - cron: "17 3 * * 1"
+    - cron: "17 3 * * *" # once daily at 08:47 IST (actual GitHub start may be delayed)
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,9 @@ jobs:
     steps:
       - name: Check out website
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+
+      - name: Verify Scholar sync logic
+        run: python3 -m unittest discover -s tests -p 'test_scholar_metrics.py'
 
       - name: Fetch Google Scholar metrics
         env:
