@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20261114-xrfix">
+  <link rel="stylesheet" href="news-strip.css?v=20261121">
 </head>
 <body data-spatial="on">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -92,6 +93,27 @@
       <div><strong id="i10-index-total">5</strong><span>i10-index</span><small>Google Scholar</small></div>
       <div><strong id="patent-total">2</strong><span>patents</span><small>filed applications</small></div>
       <div><strong>5</strong><span>silicon systems</span><small>28–180 nm CMOS</small></div><div class="visit-metric"><strong id="visitor-count" aria-live="polite">—</strong><span>site visits</span><small>Page views</small></div>
+      <!-- Edit the announcements below to update the ticker. Keep both copies in sync for a seamless loop. -->
+      <aside class="news-strip" aria-label="News and updates">
+        <div class="news-strip__identity"><span class="news-strip__signal" aria-hidden="true"></span><div><span class="news-strip__kicker">Latest highlights</span><p>News &amp; Updates</p></div></div>
+        <div class="news-strip__viewport">
+          <div class="news-strip__track">
+        <div class="news-strip__items">
+          <a class="news-strip__item" href="#publications"><span class="news-strip__tag">PUBLICATIONS</span><span class="news-strip__message">Explore 37 research papers across journals and conferences.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#silicon"><span class="news-strip__tag">SILICON</span><span class="news-strip__message">Discover five silicon systems spanning 28–180 nm CMOS.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#publications"><span class="news-strip__tag">PATENTS</span><span class="news-strip__message">Two filed patent applications in the research archive.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#experience"><span class="news-strip__tag">CAREER</span><span class="news-strip__message">XR System Technology Architect at Qualcomm Technologies.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+        </div>
+        <div class="news-strip__items" aria-hidden="true">
+          <a class="news-strip__item" href="#publications" tabindex="-1"><span class="news-strip__tag">PUBLICATIONS</span><span class="news-strip__message">Explore 37 research papers across journals and conferences.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#silicon" tabindex="-1"><span class="news-strip__tag">SILICON</span><span class="news-strip__message">Discover five silicon systems spanning 28–180 nm CMOS.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#publications" tabindex="-1"><span class="news-strip__tag">PATENTS</span><span class="news-strip__message">Two filed patent applications in the research archive.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+          <a class="news-strip__item" href="#experience" tabindex="-1"><span class="news-strip__tag">CAREER</span><span class="news-strip__message">XR System Technology Architect at Qualcomm Technologies.</span><span class="news-strip__arrow" aria-hidden="true">↗</span></a>
+        </div>
+          </div>
+        </div>
+        <button class="news-strip__toggle" type="button" aria-label="Pause news ticker" aria-pressed="false" title="Pause or play news">Ⅱ</button>
+      </aside>
     </section>
 
     <section class="about content-section" id="about" aria-labelledby="about-title">
@@ -179,5 +201,6 @@
   <script src="publication-rules.js?v=0440de7de0c5"></script>
   <script src="publications.js?v=20261120-corvet-accepted"></script>
   <script src="index.js?v=20261114-venue-neutral"></script>
+  <script src="news-strip.js?v=20261121"></script>
 </body>
 </html>
