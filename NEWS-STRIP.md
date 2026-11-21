@@ -2,7 +2,7 @@
 
 The homepage shows **one entire publication citation at a time** in the space next to Site visits; it is NOT a horizontally scrolling text marquee. Authors, quoted paper title, and italic venue are fully wrapped without truncation.
 
-When multiple accepted papers are eligible, the panel automatically rotates to the next paper every 8 seconds, with Previous, Next, and Pause/Resume controls. Automatic rotation pauses when hovered or keyboard-focused, when the tab is hidden, and for visitors requesting reduced motion. When no eligible paper exists, it displays a static link to the full Publications archive.
+When multiple accepted papers are eligible, the panel automatically rotates to the next paper every 12 seconds, with Previous, Next, and Pause/Resume controls. Automatic rotation pauses when hovered or keyboard-focused, when the tab is hidden, and for visitors requesting reduced motion. When no eligible paper exists, it displays a static link to the full Publications archive.
 
 ## Date policy (Asia/Kolkata)
 
