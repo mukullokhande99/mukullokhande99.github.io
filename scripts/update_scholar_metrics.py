@@ -115,7 +115,7 @@ def render_homepage_metrics(html: str, snapshot: dict) -> str:
     """Keep the no-JavaScript homepage fallback identical to the saved Scholar snapshot."""
 
     def replace_once(pattern: str, replacement: str, content: str) -> str:
-        result, count = re.subn(pattern, lambda _: replacement, content, count=1)
+        result, count = re.subn(pattern, lambda _: replacement, content)
         if count != 1:
             raise ValueError(f"Missing or duplicate Scholar homepage marker: {pattern}")
         return result
