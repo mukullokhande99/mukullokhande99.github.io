@@ -9,12 +9,14 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 
 PROFILE_ID = "qqAsAJ4AAAAJ"
 METRICS_PATH = Path(__file__).resolve().parents[1] / "data" / "scholar-metrics.json"
+HOMEPAGE_PATH = Path(__file__).resolve().parents[1] / "index.html"
 SOURCE_URL = f"https://scholar.google.com/citations?user={PROFILE_ID}&hl=en&oi=ao"
 
 
@@ -109,6 +111,38 @@ def build_snapshot(current: dict, refreshed: dict, articles: list[dict], synced_
     return output, data_changed
 
 
+def render_homepage_metrics(html: str, snapshot: dict) -> str:
+    """Keep the no-JavaScript homepage fallback identical to the saved Scholar snapshot."""
+
+    def replace_once(pattern: str, replacement: str, content: str) -> str:
+        result, count = re.subn(pattern, lambda _: replacement, content)
+        if count != 1:
+            raise ValueError(f"Missing or duplicate Scholar homepage marker: {pattern}")
+        return result
+
+    replacements = (
+        ("citation-total", snapshot["citations"]),
+        ("h-index-total", snapshot["h_index"]),
+        ("i10-index-total", snapshot["i10_index"]),
+    )
+    for element_id, value in replacements:
+        pattern = rf'<strong id="{re.escape(element_id)}">[^<]*</strong>'
+        html = replace_once(pattern, f'<strong id="{element_id}">{value:,}</strong>', html)
+
+    timestamp = datetime.fromisoformat(snapshot["synced_at"].replace("Z", "+00:00"))
+    india = timestamp.astimezone(ZoneInfo("Asia/Kolkata"))
+    formatted = f"{india.day} {india:%b %Y, %H:%M} IST"
+    label = (
+        '<small class="scholar-sync-status" id="scholar-updated-at">'
+        f"Last synced {formatted}</small>"
+    )
+    html = replace_once(
+        r'<small class="scholar-sync-status[^"]*" id="scholar-updated-at">[^<]*</small>',
+        label, html
+    )
+    return html
+
+
 def main() -> int:
     api_key = os.environ.get("SERPAPI_KEY", "").strip()
     if not api_key:
@@ -120,6 +154,8 @@ def main() -> int:
     synced_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     output, data_changed = build_snapshot(current, refreshed, articles, synced_at)
     METRICS_PATH.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
+    homepage = HOMEPAGE_PATH.read_text(encoding="utf-8")
+    HOMEPAGE_PATH.write_text(render_homepage_metrics(homepage, output), encoding="utf-8")
     state = "changed" if data_changed else "unchanged"
     print(
         f"Google Scholar sync succeeded at {synced_at} (values {state}): "

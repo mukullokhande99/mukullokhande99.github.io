@@ -57,5 +57,28 @@ class ScholarSyncTests(unittest.TestCase):
             scholar.extract_all_time_metrics({"cited_by": {"table": [{"citations": {"all": 199}}]}})
 
 
+
+    def test_static_homepage_fallback_tracks_the_last_successful_sync(self):
+        source = (
+            '<strong id="citation-total">171</strong>'
+            '<strong id="h-index-total">6</strong>'
+            '<strong id="i10-index-total">5</strong>'
+            '<small class="scholar-sync-status is-overdue" id="scholar-updated-at">'
+            'Last synced 16 Nov 2026, 17:02 IST · overdue</small>'
+        )
+        refreshed = dict(self.base, citations=202, h_index=7, i10_index=6,
+                         synced_at="2026-11-21T09:31:55Z")
+        rendered = scholar.render_homepage_metrics(source, refreshed)
+        self.assertIn('<strong id="citation-total">202</strong>', rendered)
+        self.assertIn('<strong id="h-index-total">7</strong>', rendered)
+        self.assertIn('<strong id="i10-index-total">6</strong>', rendered)
+        self.assertIn('Last synced 21 Nov 2026, 15:01 IST', rendered)
+        self.assertNotIn('is-overdue', rendered)
+        self.assertNotIn('>171</strong>', rendered)
+
+    def test_static_homepage_missing_marker_is_rejected(self):
+        with self.assertRaises(ValueError):
+            scholar.render_homepage_metrics("<div>no metrics here</div>", self.base)
+
 if __name__ == "__main__":
     unittest.main()
