@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 199,
+  "citations": 202,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -26,7 +26,7 @@
     },
     {
       "title": "Bio-rv: Low-power resource-efficient risc-v processor for biomedical applications",
-      "citations": 5,
+      "citations": 6,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=2000027724541432098"
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "title": "HOAA: Hybrid Overestimating Approximate Adder for Enhanced Performance Processing Engine",
-      "citations": 19,
+      "citations": 20,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=16414332940573121101"
     },
     {
@@ -81,7 +81,7 @@
     },
     {
       "title": "POLARON: Precision-aware On-device Learning and Adaptive Runtime-cONfigurable AI acceleration",
-      "citations": 4,
+      "citations": 5,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=10779982914657884622"
     },
     {
@@ -135,7 +135,7 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-11-16T11:32:40Z",
-  "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao",
-  "synced_at": "2026-11-16T11:32:40Z"
+  "updated_at": "2026-11-21T09:31:55Z",
+  "synced_at": "2026-11-21T09:31:55Z",
+  "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
