@@ -68,9 +68,31 @@
     );
   }
 
+  // Citation-only overrides preserve names/abbreviations without altering archives.
+  function citationParts(paper) {
+    const rawAuthors = String(paper.newsAuthors || paper.authors || "").trim();
+    const authors = paper.newsAuthors ? rawAuthors : (() => {
+      const people = rawAuthors.split(",").map(name => name.trim()).filter(Boolean);
+      if (people.length <= 1) return people.join("");
+      if (people.length === 2) return people.join(" and ");
+      return people.slice(0, -1).join(", ") + ", and " + people[people.length - 1];
+    })();
+    const rawVenue = String(paper.newsVenue || paper.venue || "").trim();
+    return {
+      authors,
+      title: String(paper.title || "").trim(),
+      venue: rawVenue.endsWith(".") ? rawVenue.slice(0, -1) : rawVenue
+    };
+  }
+
+  function citationPlainText(paper) {
+    const { authors, title, venue } = citationParts(paper);
+    return authors + ', "' + title + '", ' + venue + ".";
+  }
+
   // Export only the pure date functions in Node (used by the regression tests).
   if (typeof module === "object" && module.exports) {
-    module.exports = { parseDay, formatDay, addCalendarMonth, dateInIndia, recentAcceptances };
+    module.exports = { parseDay, formatDay, addCalendarMonth, dateInIndia, recentAcceptances, citationParts, citationPlainText };
   }
   if (typeof document === "undefined") return;
 
@@ -116,7 +138,13 @@
       const acceptedOn = new Intl.DateTimeFormat("en-GB", {
         day: "numeric", month: "short", year: "numeric", timeZone: "UTC"
       }).format(new Date(Date.UTC(date.year, date.month - 1, date.day)));
-      message.textContent = acceptedOn + " · " + paper.title + " — " + paper.venue;
+      tag.textContent = (paper.type === "journal" ? "JOURNAL" : "CONFERENCE") + " · ACCEPTED " + acceptedOn;
+      const { authors, title, venue } = citationParts(paper);
+      message.appendChild(document.createTextNode(authors + ', "' + title + '", '));
+      const italicVenue = document.createElement("em");
+      italicVenue.textContent = venue;
+      message.appendChild(italicVenue);
+      message.appendChild(document.createTextNode("."));
     } else {
       message.textContent = "No new paper acceptances in the past month · Browse all publications";
     }
