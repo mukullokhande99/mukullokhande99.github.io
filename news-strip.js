@@ -12,7 +12,7 @@
   "use strict";
 
   const TIME_ZONE = "Asia/Kolkata";
-  const ROTATION_MS = 8000;
+  const ROTATION_MS = 12000;
   const DATE_PATTERN = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
 
   function parseDay(value) {
