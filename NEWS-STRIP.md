@@ -37,3 +37,15 @@ Only enter an acceptance date from a genuine acceptance notice. **Do not use the
 Run `node --test tests/news-strip.test.cjs` to check expiration, sorting, month and year transitions, invalid and missing dates, and published journal records.
 
 The source of truth is `publications.js`; this is **automatic display and expiration**, not automatic discovery of acceptance notices from publishers or email.
+
+## Citation formatting in the ticker
+
+Each recent acceptance uses a complete bibliographic citation: author list, quoted paper title, and an *italicised* venue with month/year. The actual acceptance day appears in a separate tag such as `JOURNAL · ACCEPTED 5 NOV 2026`. Clicking the ticker item opens the paper URL, or the Publications archive when no URL exists.
+
+Optional `newsAuthors` and `newsVenue` fields customize only the news citation, without changing how the work appears elsewhere in the Publications archive.
+
+For RM-DPU the ticker reads:
+
+> Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma, "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads", *IEEE Transactions on Nanotechnology (TNANO), Nov. 2026*.
+
+Other papers use their original `authors`, `title`, and `venue` automatically.
