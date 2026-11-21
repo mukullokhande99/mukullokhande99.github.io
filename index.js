@@ -35,7 +35,7 @@
   let activeYear = "all";
   let activeAuthor = "all";
   let activeTitle = "all";
-  let scholarArticles = [];
+  let scholarArticles = null; // null = no verified Scholar snapshot loaded yet.
 
   const readSpatialPreference = () => {
     try {
@@ -172,6 +172,7 @@
     .filter(token => token.length > 2 && !["the", "and", "for", "with", "from"].includes(token)));
 
   const findScholarArticle = title => {
+    if (!Array.isArray(scholarArticles)) return null;
     const normalized = normalizeTitle(title);
     const compact = normalized.replaceAll(" ", "");
     const titleKey = normalizeTitle(title.split(":", 1)[0]);
@@ -251,35 +252,51 @@
         try {
           const response = await fetch(source, { cache: "no-store" });
           if (!response.ok) throw new Error(`Scholar metrics request failed: ${response.status}`);
-          metrics = await response.json();
+          const candidate = await response.json();
+          const validTotals = ["citations", "h_index", "i10_index"].every(key =>
+            Number.isInteger(candidate?.[key]) && candidate[key] >= 0
+          );
+          const checkedAt = new Date(candidate?.synced_at || candidate?.updated_at);
+          if (candidate?.profile_id !== "qqAsAJ4AAAAJ" ||
+              !validTotals || !Array.isArray(candidate.articles) ||
+              Number.isNaN(checkedAt.getTime())) {
+            throw new Error("Invalid or mismatched Google Scholar snapshot.");
+          }
+          metrics = candidate;
           break;
         } catch (sourceError) {
           console.info(`Could not load Scholar metrics from ${source}.`, sourceError);
         }
       }
-      if (!metrics) throw new Error("No Scholar metrics source was available.");
+      if (!metrics) throw new Error("No valid Scholar metrics source was available.");
 
-      scholarArticles = Array.isArray(metrics.articles)
-        ? metrics.articles.filter(article => article && typeof article.title === "string" && Number.isInteger(article.citations))
-        : [];
-
+      scholarArticles = metrics.articles.filter(article =>
+        article && typeof article.title === "string" &&
+        Number.isInteger(article.citations) && article.citations >= 0
+      );
       Object.entries(targets).forEach(([key, element]) => {
-        const value = metrics[key];
-        if (element && Number.isInteger(value) && value >= 0) element.textContent = value.toLocaleString("en-US");
+        if (element) element.textContent = metrics[key].toLocaleString("en-US");
       });
 
-      const updatedAt = document.querySelector("#scholar-updated-at");
-      const updatedDate = new Date(metrics.updated_at);
-      if (updatedAt && !Number.isNaN(updatedDate.getTime())) {
-        updatedAt.textContent = new Intl.DateTimeFormat("en", {
-          month: "short",
-          year: "numeric",
-          timeZone: "UTC"
-        }).format(updatedDate);
+      // This is the last successful site-side synchronization, not
+      // Google Scholar's internal indexing/update timestamp.
+      const syncedAt = new Date(metrics.synced_at || metrics.updated_at);
+      const syncLabel = document.querySelector("#scholar-updated-at");
+      if (syncLabel) {
+        const date = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Kolkata", day: "numeric", month: "short", year: "numeric",
+          hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+        }).format(syncedAt);
+        const overdue = Date.now() - syncedAt.getTime() > 48 * 60 * 60 * 1000;
+        syncLabel.textContent = `Last synced ${date} IST${overdue ? " · overdue" : ""}`;
+        syncLabel.title = "Last successful site sync from Google Scholar via SerpApi; this is not Scholar's internal update time.";
+        syncLabel.classList.toggle("is-overdue", overdue);
       }
       render();
     } catch (error) {
-      console.info("Using the last embedded Google Scholar metrics.", error);
+      // Keep the dated server-rendered snapshot instead of falsely
+      // presenting its last known counts as freshly synchronized.
+      console.info("Google Scholar sync could not be loaded; showing dated fallback.", error);
     }
   };
 
@@ -546,8 +563,10 @@
       }
       if (publication.type === "journal" || publication.type === "conference") {
         const scholarArticle = findScholarArticle(publication.title);
-        const citationCount = scholarArticle ? scholarArticle.citations.toLocaleString("en-US") : "0";
-        metricItems.push(`<span class="pub-metric pub-citation"><span>Citation count:</span><strong>${escapeHTML(citationCount)}</strong></span>`);
+        const citationCount = scholarArticle ? scholarArticle.citations.toLocaleString("en-US") : "—";
+        const explanation = scholarArticle ? "" :
+          ' title="Not available in the last successful Google Scholar article snapshot"';
+        metricItems.push(`<span class="pub-metric pub-citation"${explanation}><span>Citation count:</span><strong>${escapeHTML(citationCount)}</strong></span>`);
       }
       const publicationMetrics = metricItems.length
         ? `<div class="pub-metrics" aria-label="Publication metrics">${metricItems.join("")}</div>`
@@ -706,6 +725,13 @@
   document.querySelector("#year").textContent = new Date().getFullYear();
   enableDepthCards();
   updateScholarMetrics();
+  // Recheck hourly in visible tabs; also refresh whenever a hidden tab resumes.
+  window.setInterval(() => {
+    if (!document.hidden) updateScholarMetrics();
+  }, 60 * 60 * 1000);
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) updateScholarMetrics();
+  });
   updateVisitorCount();
   updateTitleOptions();
   updateFilterCounts();

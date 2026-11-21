@@ -83,7 +83,30 @@ def fetch_scholar_data(api_key: str) -> tuple[dict[str, int], list[dict]]:
 
     if payload.get("error"):
         raise RuntimeError(f"SerpApi error: {payload['error']}")
+    if not isinstance(payload.get("articles"), list) or not payload["articles"]:
+        raise ValueError("SerpApi response contains no articles; refusing to overwrite the last valid snapshot.")
     return extract_all_time_metrics(payload), extract_articles(payload)
+
+
+def build_snapshot(current: dict, refreshed: dict, articles: list[dict], synced_at: str) -> tuple[dict, bool]:
+    """Record every successful sync, even if Scholar citation totals are unchanged.
+
+    'synced_at' is the latest successful API check. 'updated_at' is the last
+    observed data change, retained for backwards compatibility.
+    """
+    metrics_unchanged = all(current.get(key) == value for key, value in refreshed.items())
+    articles_unchanged = current.get("articles") == articles
+    data_changed = not (metrics_unchanged and articles_unchanged)
+    updated_at = synced_at if data_changed else current.get("updated_at", synced_at)
+    output = {
+        "profile_id": PROFILE_ID,
+        **refreshed,
+        "articles": articles,
+        "updated_at": updated_at,
+        "synced_at": synced_at,
+        "source_url": SOURCE_URL,
+    }
+    return output, data_changed
 
 
 def main() -> int:
@@ -94,22 +117,12 @@ def main() -> int:
 
     current = json.loads(METRICS_PATH.read_text(encoding="utf-8"))
     refreshed, articles = fetch_scholar_data(api_key)
-    metrics_unchanged = all(current.get(key) == value for key, value in refreshed.items())
-    articles_unchanged = current.get("articles") == articles
-    if metrics_unchanged and articles_unchanged:
-        print("Google Scholar metrics are unchanged.")
-        return 0
-
-    output = {
-        "profile_id": PROFILE_ID,
-        **refreshed,
-        "articles": articles,
-        "updated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
-        "source_url": SOURCE_URL,
-    }
+    synced_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    output, data_changed = build_snapshot(current, refreshed, articles, synced_at)
     METRICS_PATH.write_text(json.dumps(output, indent=2) + "\n", encoding="utf-8")
+    state = "changed" if data_changed else "unchanged"
     print(
-        "Updated Google Scholar metrics: "
+        f"Google Scholar sync succeeded at {synced_at} (values {state}): "
         f"{output['citations']} citations, h-index {output['h_index']}, i10-index {output['i10_index']}."
     )
     return 0
