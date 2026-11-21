@@ -51,3 +51,25 @@ test("undated and invalidly dated records are excluded, not guessed", () => {
   ];
   assert.deepEqual(titles(items, "2026-11-21"), []);
 });
+
+test("paper ticker shows authors, quoted title, and venue as a full citation", () => {
+  const { citationPlainText } = require("../news-strip.js");
+  assert.equal(
+    citationPlainText({
+      title: "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads",
+      authors: "Mukul Lokhande, Akash Sankhe, Santosh K. Vishvakarma",
+      venue: "IEEE Transactions on Nanotechnology, Nov. 2026",
+      newsAuthors: "Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma",
+      newsVenue: "IEEE Transactions on Nanotechnology (TNANO), Nov. 2026"
+    }),
+    'Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma, "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads", IEEE Transactions on Nanotechnology (TNANO), Nov. 2026.'
+  );
+});
+
+test("default citation formats additional accepted papers without custom overrides", () => {
+  const { citationPlainText } = require("../news-strip.js");
+  assert.equal(
+    citationPlainText({ authors: "Author A, Author B, Author C", title: "Example", venue: "IEEE Journal." }),
+    'Author A, Author B, and Author C, "Example", IEEE Journal.'
+  );
+});
