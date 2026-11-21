@@ -174,3 +174,12 @@
   .news-strip__items[aria-hidden="true"] { display: none; }
   .news-strip__toggle { display: none; }
 }
+
+/* An empty acceptance window shows a static, non-scrolling archive link. */
+.news-strip.is-empty .news-strip__viewport {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+.news-strip.is-empty .news-strip__track { animation: none !important; will-change: auto; }
+.news-strip.is-empty .news-strip__items { padding: 0 22px; }
+.news-strip.is-empty .news-strip__item { white-space: normal; }
