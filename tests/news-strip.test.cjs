@@ -1,75 +1,68 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { parseDay, addCalendarMonth, formatDay, recentAcceptances } = require("../news-strip.js");
-const paper = (title, acceptanceDate, type = "journal") => ({title, type, acceptanceDate, venue: "Example venue"});
-const titles = (papers, today) => recentAcceptances(papers, today).map(x => x.title);
+const {
+  parseDay, dateInIndia, expiryExclusive, recentAcceptances, citationPlainText
+} = require("../news-strip.js");
+const paper = (title, acceptanceDate, type = "journal") => ({
+  title, type, acceptanceDate, venue: "Example Venue", authors: "Author A, Author B"
+});
+const titles = (papers, date) => recentAcceptances(papers, date).map(p => p.title);
 
-test("November acceptance appears immediately and expires on its December anniversary", () => {
-  const items = [paper("CORVET", "2026-11-20")];
-  assert.deepEqual(titles(items, "2026-11-19"), []);
-  assert.deepEqual(titles(items, "2026-11-20"), ["CORVET"]);
-  assert.deepEqual(titles(items, "2026-12-19"), ["CORVET"]);
-  assert.deepEqual(titles(items, "2026-12-20"), []);
+test("all October acceptance days remain visible through November 30", () => {
+  const papers = [paper("Oct 1", "2026-10-01"), paper("Oct 31", "2026-10-31")];
+  assert.deepEqual(titles(papers, "2026-10-01"), ["Oct 1"]);
+  assert.deepEqual(titles(papers, "2026-10-31"), ["Oct 31", "Oct 1"]);
+  assert.deepEqual(titles(papers, "2026-11-30"), ["Oct 31", "Oct 1"]);
+  assert.deepEqual(titles(papers, "2026-12-01"), []);
+  assert.equal(expiryExclusive("2026-10-01"), "2026-12-01");
+  assert.equal(expiryExclusive("2026-10-31"), "2026-12-01");
 });
 
-test("second acceptance has its own independent expiration", () => {
-  const items = [paper("RM-DPU", "2026-11-05"), paper("CORVET", "2026-11-20")];
-  assert.deepEqual(titles(items, "2026-11-21"), ["CORVET", "RM-DPU"]);
-  assert.deepEqual(titles(items, "2026-12-05"), ["CORVET"]);
+test("all November acceptances stay through December 31, then expire January 1", () => {
+  const papers = [paper("RM-DPU", "2026-11-05"), paper("CORVET", "2026-11-20")];
+  assert.deepEqual(titles(papers, "2026-11-04"), []);
+  assert.deepEqual(titles(papers, "2026-11-21"), ["CORVET", "RM-DPU"]);
+  assert.deepEqual(titles(papers, "2026-12-31"), ["CORVET", "RM-DPU"]);
+  assert.deepEqual(titles(papers, "2027-01-01"), []);
 });
 
-test("an October acceptance can remain visible into November, but not forever", () => {
-  const items = [paper("October paper", "2026-10-25", "conference")];
-  assert.deepEqual(titles(items, "2026-11-21"), ["October paper"]);
-  assert.deepEqual(titles(items, "2026-11-25"), []);
+test("December to January and January to February transitions", () => {
+  assert.equal(expiryExclusive("2026-12-31"), "2027-02-01");
+  assert.equal(expiryExclusive("2026-01-31"), "2026-03-01");
+  assert.equal(expiryExclusive("2024-01-31"), "2024-03-01");
+  assert.deepEqual(titles([paper("December", "2026-12-01")], "2027-01-31"), ["December"]);
+  assert.deepEqual(titles([paper("December", "2026-12-01")], "2027-02-01"), []);
+  assert.deepEqual(titles([paper("January", "2024-01-31")], "2024-02-29"), ["January"]);
 });
 
-test("end-of-month dates clamp to the final day of the following month", () => {
-  assert.equal(formatDay(addCalendarMonth(parseDay("2026-01-31"))), "2026-02-28");
-  assert.equal(formatDay(addCalendarMonth(parseDay("2024-01-31"))), "2024-02-29");
-  assert.equal(formatDay(addCalendarMonth(parseDay("2026-12-31"))), "2027-01-31");
-});
-
-test("January transition and leap-year expiration are calendar correct", () => {
-  assert.deepEqual(titles([paper("Year-end", "2026-12-31")], "2027-01-30"), ["Year-end"]);
-  assert.deepEqual(titles([paper("Year-end", "2026-12-31")], "2027-01-31"), []);
-  assert.deepEqual(titles([paper("Leap", "2024-01-31")], "2024-02-28"), ["Leap"]);
-  assert.deepEqual(titles([paper("Leap", "2024-01-31")], "2024-02-29"), []);
-});
-
-test("dated published papers are included even without an accepted status flag", () => {
-  const items = [{...paper("RM-DPU", "2026-11-05"), url: "https://ieeexplore.ieee.org/document/11783159"}];
-  assert.deepEqual(titles(items, "2026-11-21"), ["RM-DPU"]);
-});
-
-test("undated and invalidly dated records are excluded, not guessed", () => {
-  const items = [
-    {type:"conference", title:"No date", accepted:true, year:2027, venue:"January event"},
-    paper("Invalid day", "2026-02-30"),
-    paper("Wrong format", "05-11-2026"),
+test("exclude future, undated, invalid, and non-paper entries", () => {
+  const papers = [
+    paper("Future", "2026-12-01"),
+    paper("Invalid", "2026-02-30"),
+    paper("Missing", undefined),
     paper("Advanced", "2026-11-20", "advanced")
   ];
-  assert.deepEqual(titles(items, "2026-11-21"), []);
+  assert.deepEqual(titles(papers, "2026-11-21"), []);
+  assert.equal(parseDay("2026-02-30"), null);
 });
 
-test("paper ticker shows authors, quoted title, and venue as a full citation", () => {
-  const { citationPlainText } = require("../news-strip.js");
-  assert.equal(
-    citationPlainText({
-      title: "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads",
-      authors: "Mukul Lokhande, Akash Sankhe, Santosh K. Vishvakarma",
-      venue: "IEEE Transactions on Nanotechnology, Nov. 2026",
-      newsAuthors: "Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma",
-      newsVenue: "IEEE Transactions on Nanotechnology (TNANO), Nov. 2026"
-    }),
-    'Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma, "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads", IEEE Transactions on Nanotechnology (TNANO), Nov. 2026.'
-  );
+test("published papers remain eligible if acceptanceDate is recorded", () => {
+  const papers = [{...paper("RM-DPU", "2026-11-05"), published: true, url: "https://ieeexplore.ieee.org/document/11783159"}];
+  assert.deepEqual(titles(papers, "2026-12-31"), ["RM-DPU"]);
 });
 
-test("default citation formats additional accepted papers without custom overrides", () => {
-  const { citationPlainText } = require("../news-strip.js");
-  assert.equal(
-    citationPlainText({ authors: "Author A, Author B, Author C", title: "Example", venue: "IEEE Journal." }),
-    'Author A, Author B, and Author C, "Example", IEEE Journal.'
-  );
+test("RM-DPU uses complete exact citation format", () => {
+  const rm = {
+    title: "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads",
+    authors: "Mukul Lokhande, Akash Sankhe, Santosh K. Vishvakarma",
+    venue: "IEEE Transactions on Nanotechnology, Nov. 2026",
+    newsAuthors: "Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma",
+    newsVenue: "IEEE Transactions on Nanotechnology (TNANO), Nov. 2026"
+  };
+  assert.equal(citationPlainText(rm),
+    'Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma, "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads", IEEE Transactions on Nanotechnology (TNANO), Nov. 2026.');
+});
+
+test("month boundaries are evaluated in India time", () => {
+  assert.equal(dateInIndia(new Date("2026-11-30T18:30:00.000Z")), "2026-12-01");
 });

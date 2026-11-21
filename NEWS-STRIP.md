@@ -1,51 +1,42 @@
-# Automated News & Updates — acceptance ticker
+# News & Updates — publication announcements
 
-The homepage ticker reads `window.PUBLICATIONS` in [publications.js](publications.js). **No edits to the ticker markup are needed** when a paper is accepted.
+The homepage shows **one entire publication citation at a time** in the space next to Site visits; it is NOT a horizontally scrolling text marquee. Authors, quoted paper title, and italic venue are fully wrapped without truncation.
 
-## To add an accepted paper
+When multiple accepted papers are eligible, the panel automatically rotates to the next paper every 12 seconds, with Previous, Next, and Pause/Resume controls. Automatic rotation pauses when hovered or keyboard-focused, when the tab is hidden, and for visitors requesting reduced motion. When no eligible paper exists, it displays a static link to the full Publications archive.
 
-Create or update a journal/conference record in `publications.js` and add the exact acceptance date as `YYYY-MM-DD`, for example:
+## Date policy (Asia/Kolkata)
+
+Each paper is shown starting from its actual acceptance date until **the end of the entire calendar month after acceptance**:
+
+- Any October acceptance (Oct. 1 or Oct. 31) remains visible **through November 30**; disappears December 1.
+- Any November acceptance remains visible **through December 31**; disappears January 1.
+- Any December acceptance remains visible **through January 31**; disappears February 1.
+- Works accepted in the future never show prematurely.
+
+In the implementation, `expiryExclusive` returns the first day of the month after the following month. Thus papers accepted in the current and immediately preceding month appear together, and no day-of-month anniversary is used.
+
+## Adding papers
+
+The source of truth is `publications.js`. Add an exact, verified acceptance date:
 
 ```js
 {
-  "type": "conference",
-  "year": 2027,
-  "title": "Example paper title",
+  "type": "journal",
+  "year": 2026,
+  "title": "An example paper",
   "authors": "Author A, Author B",
-  "venue": "Example Conference, Jan. 2027",
+  "venue": "IEEE Example Journal, Nov. 2026",
   "accepted": true,
-  "status": "[Accepted]",
-  "acceptanceDate": "2026-11-20"
+  "acceptanceDate": "2026-11-05"
 }
 ```
 
-Only enter an acceptance date from a genuine acceptance notice. **Do not use the conference event date or publication issue date as an acceptance date.** An existing published paper with an explicit `acceptanceDate` also qualifies, even if it no longer has an `[Accepted]` badge.
+Records without `acceptanceDate` are excluded from the news rotation, since neither publication issue dates nor conference event dates establish acceptance dates. Existing published papers with a verified `acceptanceDate` remain eligible.
 
-## Visibility rule
-
-- All papers with valid acceptance dates that are in the **current or previous calendar month** are considered.
-- Each announcement is shown from its acceptance day up to, but **not including**, its one-calendar-month anniversary.
-- Announcements are sorted newest-first and every eligible paper is shown, not just the latest one.
-- Dates follow `Asia/Kolkata` for consistent display across visitors.
-- If no papers qualify, the ticker shows a static link to the complete Publications archive.
-- The displayed set is recalculated when a page loads, when it regains focus, and every 5 minutes in an open tab. The publications archive itself never loses entries.
-- A publication without `acceptanceDate` will **not** be announced, because its expiry cannot be calculated accurately.
-- End-of-month handling is calendar-based: e.g. January 31 expires on February 28 (or 29 in a leap year).
-
-## Tests
-
-Run `node --test tests/news-strip.test.cjs` to check expiration, sorting, month and year transitions, invalid and missing dates, and published journal records.
-
-The source of truth is `publications.js`; this is **automatic display and expiration**, not automatic discovery of acceptance notices from publishers or email.
-
-## Citation formatting in the ticker
-
-Each recent acceptance uses a complete bibliographic citation: author list, quoted paper title, and an *italicised* venue with month/year. The actual acceptance day appears in a separate tag such as `JOURNAL · ACCEPTED 5 NOV 2026`. Clicking the ticker item opens the paper URL, or the Publications archive when no URL exists.
-
-Optional `newsAuthors` and `newsVenue` fields customize only the news citation, without changing how the work appears elsewhere in the Publications archive.
-
-For RM-DPU the ticker reads:
+Optional `newsAuthors` and `newsVenue` fields override **only the announcement's bibliographic format** without changing the permanent Publications list. RM-DPU uses them to display:
 
 > Mukul Lokhande, Akash Sankhe, and Santosh Kumar Vishvakarma, "RM-DPU: Resource-Multiplexed Digital Processing-in-Memory Unit for Edge-AI Workloads", *IEEE Transactions on Nanotechnology (TNANO), Nov. 2026*.
 
-Other papers use their original `authors`, `title`, and `venue` automatically.
+Papers remain in the permanent Publications archive after the announcement expires. The ticker recalculates each time the page loads or the tab regains focus and while an open tab rotates. No publisher crawling or background service is required.
+
+Run `node --test tests/news-strip.test.cjs` for date and formatting regression coverage.

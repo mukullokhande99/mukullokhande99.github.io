@@ -1,30 +1,28 @@
 /*
- * Automatically display recently accepted journal and conference papers.
+ * Rotating News & Updates card — a full citation at a time.
+ * Every acceptance is visible for its ENTIRE acceptance calendar month AND
+ * the ENTIRE following month (Asia/Kolkata); no per-day anniversaries.
  *
- * Source: window.PUBLICATIONS from publications.js
- * Eligibility: explicit YYYY-MM-DD acceptanceDate, accepted in the current
- * or previous calendar month, and not past the one-calendar-month anniversary.
- * Dates use Asia/Kolkata so all visitors see the same cut-off day.
+ * October 1–31 acceptance => ends December 1 (shown through November 30).
+ * November 1–30 acceptance => ends January 1 (shown through December 31).
  *
- * Example: accepted 2026-11-20 => shown through 2026-12-19,
- * disappears on 2026-12-20 (IST), without needing to edit the ticker.
+ * Source of truth: window.PUBLICATIONS loaded from publications.js.
  */
 (function (root) {
   "use strict";
 
   const TIME_ZONE = "Asia/Kolkata";
-  const DAY = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
+  const ROTATION_MS = 12000;
+  const DATE_PATTERN = /^([0-9]{4})-([0-9]{2})-([0-9]{2})$/;
 
   function parseDay(value) {
     if (typeof value !== "string") return null;
-    const match = DAY.exec(value);
+    const match = DATE_PATTERN.exec(value);
     if (!match) return null;
-    const year = Number(match[1]);
-    const month = Number(match[2]);
-    const day = Number(match[3]);
+    const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
     if (year < 1900 || year > 2200 || month < 1 || month > 12 || day < 1) return null;
-    const max = new Date(Date.UTC(year, month, 0)).getUTCDate();
-    return day <= max ? { year, month, day } : null;
+    const last = new Date(Date.UTC(year, month, 0)).getUTCDate();
+    return day <= last ? { year, month, day } : null;
   }
 
   function formatDay(parts) {
@@ -33,55 +31,48 @@
       String(parts.day).padStart(2, "0");
   }
 
-  function addCalendarMonth(date) {
-    const year = date.month === 12 ? date.year + 1 : date.year;
-    const month = date.month === 12 ? 1 : date.month + 1;
-    const lastDay = new Date(Date.UTC(year, month, 0)).getUTCDate();
-    return { year, month, day: Math.min(date.day, lastDay) };
-  }
-
   function dateInIndia(now) {
-    const format = new Intl.DateTimeFormat("en-GB", {
+    const parts = new Intl.DateTimeFormat("en-GB", {
       timeZone: TIME_ZONE, year: "numeric", month: "2-digit", day: "2-digit"
-    });
-    const parts = Object.fromEntries(format.formatToParts(now)
+    }).formatToParts(now);
+    const fields = Object.fromEntries(parts
       .filter(part => ["year", "month", "day"].includes(part.type))
       .map(part => [part.type, Number(part.value)]));
-    return formatDay(parts);
+    return formatDay(fields);
+  }
+
+  // Exclusive end: the first day of the month AFTER the next calendar month.
+  function expiryExclusive(acceptanceDate) {
+    const day = parseDay(acceptanceDate);
+    if (!day) return null;
+    return new Date(Date.UTC(day.year, day.month + 1, 1)).toISOString().slice(0, 10);
   }
 
   function recentAcceptances(publications, todayISO) {
-    const today = parseDay(todayISO);
-    if (!today || !Array.isArray(publications)) return [];
-
+    if (!parseDay(todayISO) || !Array.isArray(publications)) return [];
     return publications.filter(paper => {
       if (!paper || !["journal", "conference"].includes(paper.type)) return false;
-      const accepted = parseDay(paper.acceptanceDate);
-      if (!accepted) return false; // Never infer an unrecorded acceptance date.
-      const monthsAgo = (today.year - accepted.year) * 12 + today.month - accepted.month;
-      if (monthsAgo < 0 || monthsAgo > 1) return false;
-      const expiry = formatDay(addCalendarMonth(accepted));
-      return todayISO >= paper.acceptanceDate && todayISO < expiry;
+      const end = expiryExclusive(paper.acceptanceDate);
+      return Boolean(end && paper.acceptanceDate <= todayISO && todayISO < end);
     }).sort((a, b) =>
       b.acceptanceDate.localeCompare(a.acceptanceDate) ||
       String(a.title).localeCompare(String(b.title))
     );
   }
 
-  // Citation-only overrides preserve names/abbreviations without altering archives.
   function citationParts(paper) {
-    const rawAuthors = String(paper.newsAuthors || paper.authors || "").trim();
-    const authors = paper.newsAuthors ? rawAuthors : (() => {
-      const people = rawAuthors.split(",").map(name => name.trim()).filter(Boolean);
-      if (people.length <= 1) return people.join("");
-      if (people.length === 2) return people.join(" and ");
-      return people.slice(0, -1).join(", ") + ", and " + people[people.length - 1];
+    const raw = String(paper.newsAuthors || paper.authors || "").trim();
+    const authors = paper.newsAuthors ? raw : (() => {
+      const names = raw.split(",").map(name => name.trim()).filter(Boolean);
+      if (names.length <= 1) return names.join("");
+      if (names.length === 2) return names.join(" and ");
+      return names.slice(0, -1).join(", ") + ", and " + names[names.length - 1];
     })();
-    const rawVenue = String(paper.newsVenue || paper.venue || "").trim();
+    const venueText = String(paper.newsVenue || paper.venue || "").trim();
     return {
       authors,
       title: String(paper.title || "").trim(),
-      venue: rawVenue.endsWith(".") ? rawVenue.slice(0, -1) : rawVenue
+      venue: venueText.endsWith(".") ? venueText.slice(0, -1) : venueText
     };
   }
 
@@ -90,134 +81,131 @@
     return authors + ', "' + title + '", ' + venue + ".";
   }
 
-  // Export only the pure date functions in Node (used by the regression tests).
   if (typeof module === "object" && module.exports) {
-    module.exports = { parseDay, formatDay, addCalendarMonth, dateInIndia, recentAcceptances, citationParts, citationPlainText };
+    module.exports = { parseDay, formatDay, dateInIndia, expiryExclusive,
+      recentAcceptances, citationParts, citationPlainText };
   }
-  if (typeof document === "undefined") return;
 
+  if (typeof document === "undefined") return;
   const strip = document.querySelector(".news-strip");
   const viewport = strip?.querySelector(".news-strip__viewport");
   const track = strip?.querySelector(".news-strip__track");
+  const controls = strip?.querySelector(".news-strip__controls");
+  const counter = strip?.querySelector(".news-strip__count");
+  const previous = strip?.querySelector(".news-strip__previous");
+  const next = strip?.querySelector(".news-strip__next");
   const toggle = strip?.querySelector(".news-strip__toggle");
-  if (!strip || !viewport || !track || !toggle) return;
+  if (!strip || !viewport || !track || !controls || !counter || !previous || !next || !toggle) return;
 
-  let renderedDay = "";
-  let resizeQueued = false;
-  let displayedPapers = [];
+  const reducedMotion = root.matchMedia?.("(prefers-reduced-motion: reduce)");
+  const hoverCapable = root.matchMedia?.("(hover: hover)");
+  let shownDay = "";
+  let items = [];
+  let currentIndex = 0;
+  let paused = false;
 
-  function makeLink(paper, duplicated) {
+  function makeCard(paper) {
     const link = document.createElement("a");
     link.className = "news-strip__item";
-    const source = paper?.url;
-    let external = null;
-    if (typeof source === "string") {
-      try {
-        const resolved = new URL(source, window.location.href);
-        if (resolved.protocol === "https:" || resolved.protocol === "http:") external = resolved.href;
-      } catch (_error) { /* Fallback to the publication archive. */ }
-    }
-    link.href = external || "#publications";
-    if (external) {
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-    }
-    if (duplicated) {
-      link.tabIndex = -1;
-      link.setAttribute("aria-hidden", "true");
-    }
-
-    const tag = document.createElement("span");
-    tag.className = "news-strip__tag";
-    tag.textContent = paper ? (paper.type === "journal" ? "JOURNAL ACCEPTED" : "CONFERENCE ACCEPTED") : "PUBLICATIONS";
-
-    const message = document.createElement("span");
-    message.className = "news-strip__message";
     if (paper) {
-      const date = parseDay(paper.acceptanceDate);
-      const acceptedOn = new Intl.DateTimeFormat("en-GB", {
-        day: "numeric", month: "short", year: "numeric", timeZone: "UTC"
-      }).format(new Date(Date.UTC(date.year, date.month - 1, date.day)));
-      tag.textContent = (paper.type === "journal" ? "JOURNAL" : "CONFERENCE") + " · ACCEPTED " + acceptedOn;
-      const { authors, title, venue } = citationParts(paper);
-      message.appendChild(document.createTextNode(authors + ', "' + title + '", '));
-      const italicVenue = document.createElement("em");
-      italicVenue.textContent = venue;
-      message.appendChild(italicVenue);
-      message.appendChild(document.createTextNode("."));
-    } else {
-      message.textContent = "No new paper acceptances in the past month · Browse all publications";
-    }
-    const arrow = document.createElement("span");
-    arrow.className = "news-strip__arrow";
-    arrow.textContent = "↗";
-    arrow.setAttribute("aria-hidden", "true");
+      // Only open HTTP(S) paper URLs; otherwise navigate to the archive.
+      let href = "#publications";
+      try {
+        if (typeof paper.url === "string") {
+          const url = new URL(paper.url, root.location.href);
+          if (url.protocol === "https:" || url.protocol === "http:") href = url.href;
+        }
+      } catch (_error) { /* Keep the internal archive link. */ }
+      link.href = href;
+      if (href !== "#publications") {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
 
-    link.append(tag, message, arrow);
+      const date = parseDay(paper.acceptanceDate);
+      const when = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "UTC", day: "numeric", month: "short", year: "numeric"
+      }).format(new Date(Date.UTC(date.year, date.month - 1, date.day)));
+
+      const tag = document.createElement("span");
+      tag.className = "news-strip__tag";
+      tag.textContent = (paper.type === "journal" ? "JOURNAL" : "CONFERENCE") + " · ACCEPTED " + when;
+
+      const citation = document.createElement("p");
+      citation.className = "news-strip__message";
+      const { authors, title, venue } = citationParts(paper);
+      citation.appendChild(document.createTextNode(authors + ', "' + title + '", '));
+      const journal = document.createElement("em");
+      journal.textContent = venue;
+      citation.append(journal, document.createTextNode("."));
+      link.append(tag, citation);
+    } else {
+      link.href = "#publications";
+      const tag = document.createElement("span");
+      tag.className = "news-strip__tag";
+      tag.textContent = "PUBLICATIONS";
+      const message = document.createElement("p");
+      message.className = "news-strip__message";
+      message.textContent = "No new acceptances this month or last month. Browse the complete publications archive ↗";
+      link.append(tag, message);
+    }
     return link;
   }
 
   function draw() {
-    const hasPapers = displayedPapers.length > 0;
-    strip.classList.toggle("is-empty", !hasPapers);
-    toggle.hidden = !hasPapers;
-    const first = document.createElement("div");
-    first.className = "news-strip__items";
-    const papers = hasPapers ? displayedPapers : [null];
-    papers.forEach(paper => first.appendChild(makeLink(paper, false)));
-    track.replaceChildren(first);
-
-    if (!hasPapers) return;
-
-    // Repeat the first sequence if too short to cover a wide viewport.
-    // All repeated links are hidden from assistive tech and tab navigation.
-    const minimumWidth = viewport.clientWidth + 50;
-    let repetitions = 0;
-    while (first.getBoundingClientRect().width < minimumWidth && repetitions < 8) {
-      papers.forEach(paper => first.appendChild(makeLink(paper, true)));
-      repetitions++;
-    }
-
-    const second = first.cloneNode(true);
-    second.setAttribute("aria-hidden", "true");
-    second.querySelectorAll("a").forEach(link => {
-      link.tabIndex = -1;
-      link.setAttribute("aria-hidden", "true");
-    });
-    track.appendChild(second);
+    const count = items.length;
+    const hasMultiple = count > 1;
+    strip.classList.toggle("is-empty", count === 0);
+    strip.classList.toggle("is-single", !hasMultiple);
+    controls.hidden = !hasMultiple;
+    counter.textContent = count ? String(currentIndex + 1).padStart(2, "0") + " / " +
+      String(count).padStart(2, "0") : "0 / 0";
+    // DOM replacement triggers a short fade-in; every full citation is visible at once.
+    track.replaceChildren(makeCard(count ? items[currentIndex] : null));
   }
 
-  function update() {
+  function updateForDate() {
     const today = dateInIndia(new Date());
-    if (renderedDay === today) return;
-    renderedDay = today;
-    displayedPapers = recentAcceptances(root.PUBLICATIONS || [], today);
+    if (today === shownDay) return;
+    shownDay = today;
+    items = recentAcceptances(root.PUBLICATIONS || [], today);
+    currentIndex = 0;
     draw();
   }
 
-  toggle.addEventListener("click", () => {
-    const paused = strip.classList.toggle("is-paused");
+  function switchTo(step) {
+    if (items.length < 2) return;
+    currentIndex = (currentIndex + step + items.length) % items.length;
+    draw();
+  }
+
+  function updatePauseButton() {
     toggle.setAttribute("aria-pressed", String(paused));
-    toggle.setAttribute("aria-label", paused ? "Play news ticker" : "Pause news ticker");
-    toggle.title = paused ? "Play news" : "Pause news";
+    toggle.setAttribute("aria-label", paused ? "Resume automatic paper rotation" : "Pause automatic paper rotation");
+    toggle.title = paused ? "Resume automatic rotation" : "Pause automatic rotation";
     toggle.textContent = paused ? "▶" : "Ⅱ";
+  }
+
+  previous.addEventListener("click", () => switchTo(-1));
+  next.addEventListener("click", () => switchTo(1));
+  toggle.addEventListener("click", () => {
+    paused = !paused;
+    updatePauseButton();
   });
 
-  if ("ResizeObserver" in root) {
-    new ResizeObserver(() => {
-      if (resizeQueued) return;
-      resizeQueued = true;
-      requestAnimationFrame(() => {
-        resizeQueued = false;
-        draw();
-      });
-    }).observe(viewport);
-  }
   document.addEventListener("visibilitychange", () => {
-    if (!document.hidden) update();
+    if (!document.hidden) updateForDate();
   });
-  window.addEventListener("focus", update);
-  // Handles a site tab left open across the month-anniversary deadline.
-  window.setInterval(update, 5 * 60 * 1000);
-  update();
+  root.addEventListener("focus", updateForDate);
+
+  root.setInterval(() => {
+    updateForDate();
+    if (items.length < 2 || paused || document.hidden || reducedMotion?.matches) return;
+    if (strip.matches(":focus-within")) return;
+    if (hoverCapable?.matches && strip.matches(":hover")) return;
+    switchTo(1);
+  }, ROTATION_MS);
+
+  updatePauseButton();
+  updateForDate();
 })(typeof globalThis === "object" ? globalThis : this);

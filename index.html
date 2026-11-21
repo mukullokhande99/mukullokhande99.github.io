@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css?v=20261114-xrfix">
-  <link rel="stylesheet" href="news-strip.css?v=20261121-accepted">
+  <link rel="stylesheet" href="news-strip.css?v=20261121-card">
 </head>
 <body data-spatial="on">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -93,15 +93,25 @@
       <div><strong id="i10-index-total">5</strong><span>i10-index</span><small>Google Scholar</small></div>
       <div><strong id="patent-total">2</strong><span>patents</span><small>filed applications</small></div>
       <div><strong>5</strong><span>silicon systems</span><small>28–180 nm CMOS</small></div><div class="visit-metric"><strong id="visitor-count" aria-live="polite">—</strong><span>site visits</span><small>Page views</small></div>
-      <!-- Recent acceptance announcements are generated from publications.js. -->
+      <!-- One complete citation at a time; automatically selects recent acceptances from publications.js. -->
       <aside class="news-strip" aria-label="Recent paper acceptances">
-        <div class="news-strip__identity"><span class="news-strip__signal" aria-hidden="true"></span><div><span class="news-strip__kicker">Latest publications</span><p>News &amp; Updates</p></div></div>
-        <div class="news-strip__viewport" aria-label="Papers accepted within the last month">
+        <div class="news-strip__identity">
+          <span class="news-strip__signal" aria-hidden="true"></span>
+          <div><span class="news-strip__kicker">Latest publications</span><p>News &amp; Updates</p></div>
+        </div>
+        <div class="news-strip__viewport" aria-label="Papers accepted in this month or last month">
           <div class="news-strip__track" id="recent-publications-track">
-            <div class="news-strip__items"><a class="news-strip__item" href="#publications"><span class="news-strip__tag">PUBLICATIONS</span><span class="news-strip__message">View the latest accepted papers in the research archive.</span></a></div>
+            <a class="news-strip__item" href="#publications"><span class="news-strip__tag">PUBLICATIONS</span><p class="news-strip__message">Browse the latest research publications.</p></a>
           </div>
         </div>
-        <button class="news-strip__toggle" type="button" aria-label="Pause news ticker" aria-pressed="false" title="Pause or play news">Ⅱ</button>
+        <div class="news-strip__controls" role="group" aria-label="Publication announcements">
+          <span class="news-strip__count" aria-live="polite">— / —</span>
+          <div class="news-strip__controls-row">
+            <button type="button" class="news-strip__previous" aria-label="Previous accepted paper" title="Previous paper">←</button>
+            <button type="button" class="news-strip__next" aria-label="Next accepted paper" title="Next paper">→</button>
+            <button type="button" class="news-strip__toggle" aria-label="Pause automatic paper rotation" aria-pressed="false" title="Pause automatic rotation">Ⅱ</button>
+          </div>
+        </div>
       </aside>
     </section>
 
@@ -190,6 +200,6 @@
   <script src="publication-rules.js?v=0440de7de0c5"></script>
   <script src="publications.js?v=20261121-citation"></script>
   <script src="index.js?v=20261114-venue-neutral"></script>
-  <script src="news-strip.js?v=20261121-citation"></script>
+  <script src="news-strip.js?v=20261121-card"></script>
 </body>
 </html>
