@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 202,
+  "citations": 203,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -56,7 +56,7 @@
     },
     {
       "title": "Flex-PE: Flexible and SIMD multiprecision processing element for AI workloads",
-      "citations": 58,
+      "citations": 59,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=12966948204058567294"
     },
     {
@@ -135,7 +135,7 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-11-21T09:31:55Z",
-  "synced_at": "2026-11-21T09:34:14Z",
+  "updated_at": "2026-11-22T11:37:31Z",
+  "synced_at": "2026-11-22T11:37:31Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
