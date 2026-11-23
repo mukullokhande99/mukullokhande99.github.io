@@ -115,6 +115,11 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=5665477958927018951"
     },
     {
+      "title": "RM-DPU: Resource-Multiplexed Digital Processing-in-memory Unit for Edge-AI Workloads",
+      "citations": 0,
+      "cited_by_url": ""
+    },
+    {
       "title": "Trans-precision NPU for resource-efficient mobile AI acceleration",
       "citations": 1,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=3563923412327302310"
@@ -135,7 +140,7 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-11-22T11:37:31Z",
-  "synced_at": "2026-11-22T11:37:31Z",
+  "updated_at": "2026-11-23T13:06:06Z",
+  "synced_at": "2026-11-23T13:06:06Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
