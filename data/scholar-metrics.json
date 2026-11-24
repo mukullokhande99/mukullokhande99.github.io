@@ -1,6 +1,6 @@
 {
   "profile_id": "qqAsAJ4AAAAJ",
-  "citations": 203,
+  "citations": 206,
   "h_index": 6,
   "i10_index": 5,
   "articles": [
@@ -11,7 +11,7 @@
     },
     {
       "title": "Area-optimized 2D Interleaved Adder Tree Design for Sparse DCIM Edge Processing",
-      "citations": 12,
+      "citations": 13,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=4895385300727195788"
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       "title": "LPRE: Logarithmic Posit-enabled Reconfigurable edge-AI Engine",
-      "citations": 28,
+      "citations": 29,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=8466834694576328665"
     },
     {
@@ -96,7 +96,7 @@
     },
     {
       "title": "RAPID: Re-Configurable Adder Tree Based Performance-Incentivized AI Digital CIM Macro",
-      "citations": 2,
+      "citations": 3,
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=10700881031867476828"
     },
     {
@@ -140,7 +140,7 @@
       "cited_by_url": "https://scholar.google.com/scholar?oi=bibs&hl=en&cites=1836583490008800653"
     }
   ],
-  "updated_at": "2026-11-23T13:06:06Z",
-  "synced_at": "2026-11-23T13:06:06Z",
+  "updated_at": "2026-11-24T13:53:42Z",
+  "synced_at": "2026-11-24T13:53:42Z",
   "source_url": "https://scholar.google.com/citations?user=qqAsAJ4AAAAJ&hl=en&oi=ao"
 }
